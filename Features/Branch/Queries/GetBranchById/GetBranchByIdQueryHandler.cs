@@ -5,7 +5,7 @@ using Alwalid.Cms.Api.Features.Branch;
 
 namespace Alwalid.Cms.Api.Features.Branch.Queries.GetBranchById
 {
-    public class GetBranchByIdQueryHandler : IQueryHandler<GetBranchByIdQuery, Entities.Branch?>
+    public class GetBranchByIdQueryHandler : IQueryHandler<GetBranchByIdQuery, Entities.Branch>
     {
         private readonly IBranchRepository _branchRepository;
 
@@ -14,7 +14,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Queries.GetBranchById
             _branchRepository = branchRepository;
         }
 
-        public async Task<Result<Entities.Branch?>> Handle(GetBranchByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<Entities.Branch>> Handle(GetBranchByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -22,14 +22,14 @@ namespace Alwalid.Cms.Api.Features.Branch.Queries.GetBranchById
                 
                 if (branch == null)
                 {
-                    return await Result<Entities.Branch?>.FaildAsync(false, "Branch not found.");
+                    return await Result<Entities.Branch>.FaildAsync(false, "Branch not found.");
                 }
 
-                return await Result<Entities.Branch?>.SuccessAsync(branch, "Branch retrieved successfully.");
+                return await Result<Entities.Branch>.SuccessAsync(branch, "Branch retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<Entities.Branch?>.FaildAsync(false, $"Error retrieving branch: {ex.Message}");
+                return await Result<Entities.Branch>.FaildAsync(false, $"Error retrieving branch: {ex.Message}");
             }
         }
     }

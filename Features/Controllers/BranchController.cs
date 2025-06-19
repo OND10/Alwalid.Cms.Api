@@ -6,6 +6,7 @@ using Alwalid.Cms.Api.Features.Branch.Queries.GetAllBranches;
 using Alwalid.Cms.Api.Features.Branch.Queries.GetBranchById;
 using Alwalid.Cms.Api.Abstractions.Messaging;
 using Alwalid.Cms.Api.Common.Handler;
+using Alwalid.Cms.Api.Features.Branch.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Controllers
 {
@@ -13,18 +14,18 @@ namespace Alwalid.Cms.Api.Features.Controllers
     [Route("api/[controller]")]
     public class BranchController : ControllerBase
     {
-        private readonly ICommandHandler<AddBranchCommand, Result<int>> _addBranchHandler;
-        private readonly ICommandHandler<UpdateBranchCommand, Result<bool>> _updateBranchHandler;
-        private readonly ICommandHandler<DeleteBranchCommand, Result<bool>> _deleteBranchHandler;
-        private readonly IQueryHandler<GetAllBranchesQuery, Result<List<GetAllBranchesResponse>>> _getAllBranchesHandler;
-        private readonly IQueryHandler<GetBranchByIdQuery, Result<GetBranchByIdResponse>> _getBranchByIdHandler;
+        private readonly ICommandHandler<AddBranchCommand, BranchResponseDto> _addBranchHandler;
+        private readonly ICommandHandler<UpdateBranchCommand, Entities.Branch> _updateBranchHandler;
+        private readonly ICommandHandler<DeleteBranchCommand, bool> _deleteBranchHandler;
+        private readonly IQueryHandler<GetAllBranchesQuery, IEnumerable<Entities.Branch>> _getAllBranchesHandler;
+        private readonly IQueryHandler<GetBranchByIdQuery, Entities.Branch> _getBranchByIdHandler;
 
         public BranchController(
-            ICommandHandler<AddBranchCommand, Result<int>> addBranchHandler,
-            ICommandHandler<UpdateBranchCommand, Result<bool>> updateBranchHandler,
-            ICommandHandler<DeleteBranchCommand, Result<bool>> deleteBranchHandler,
-            IQueryHandler<GetAllBranchesQuery, Result<List<GetAllBranchesResponse>>> getAllBranchesHandler,
-            IQueryHandler<GetBranchByIdQuery, Result<GetBranchByIdResponse>> getBranchByIdHandler)
+            ICommandHandler<AddBranchCommand, BranchResponseDto> addBranchHandler,
+            ICommandHandler<UpdateBranchCommand, Entities.Branch> updateBranchHandler,
+            ICommandHandler<DeleteBranchCommand, bool> deleteBranchHandler,
+            IQueryHandler<GetAllBranchesQuery, IEnumerable<Entities.Branch>> getAllBranchesHandler,
+            IQueryHandler<GetBranchByIdQuery, Entities.Branch> getBranchByIdHandler)
         {
             _addBranchHandler = addBranchHandler;
             _updateBranchHandler = updateBranchHandler;
@@ -34,63 +35,78 @@ namespace Alwalid.Cms.Api.Features.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBranch([FromBody] AddBranchRequest request)
+        public async Task<IActionResult> AddBranch([FromBody] BranchRequestDto request, CancellationToken cancellationToken)
         {
-            var command = new AddBranchCommand(request);
-            var result = await _addBranchHandler.HandleAsync(command);
-            
+            var command = new AddBranchCommand
+            {
+                Request = request
+            };
+            var result = await _addBranchHandler.Handle(command, cancellationToken);
+
             if (result.IsSuccess)
-                return Ok(result.Value);
-            
-            return BadRequest(result.Error);
+                return Ok(result.Data);
+
+            return BadRequest();
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBranch(int id, [FromBody] UpdateBranchRequest request)
+        public async Task<IActionResult> UpdateBranch(int id, [FromBody] UpdateBranchRequestDto request, CancellationToken cancellationToken)
         {
-            var command = new UpdateBranchCommand(id, request);
-            var result = await _updateBranchHandler.HandleAsync(command);
-            
+            var command = new UpdateBranchCommand
+            {
+                Address = request.Address,
+                City = request.City,
+                CountryId = request.CountryId,
+                Id = request.Id
+            };
+            var result = await _updateBranchHandler.Handle(command, cancellationToken);
+
             if (result.IsSuccess)
-                return Ok(result.Value);
-            
-            return BadRequest(result.Error);
+                return Ok(result.Data);
+
+            return BadRequest();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBranch(int id)
+        public async Task<IActionResult> DeleteBranch(int id, CancellationToken cancellationToken)
         {
-            var command = new DeleteBranchCommand(id);
-            var result = await _deleteBranchHandler.HandleAsync(command);
-            
+            var command = new DeleteBranchCommand
+            {
+                Id = id
+            };
+            var result = await _deleteBranchHandler.Handle(command, cancellationToken);
+
             if (result.IsSuccess)
-                return Ok(result.Value);
-            
-            return BadRequest(result.Error);
+                return Ok(result.Data);
+
+            return BadRequest();
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllBranches()
+        public async Task<IActionResult> GetAllBranches(CancellationToken cancellationToken)
         {
             var query = new GetAllBranchesQuery();
-            var result = await _getAllBranchesHandler.HandleAsync(query);
-            
+            var result = await _getAllBranchesHandler.Handle(query, cancellationToken);
+
             if (result.IsSuccess)
-                return Ok(result.Value);
-            
-            return BadRequest(result.Error);
+                return Ok(result.Data);
+
+            return BadRequest();
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetBranchById(int id)
+        public async Task<IActionResult> GetBranchById(int id, CancellationToken cancellationToken)
         {
-            var query = new GetBranchByIdQuery(id);
-            var result = await _getBranchByIdHandler.HandleAsync(query);
-            
+            var query = new GetBranchByIdQuery
+            {
+                Id = id
+            };
+            var result = await _getBranchByIdHandler.Handle(query, cancellationToken);
+
             if (result.IsSuccess)
-                return Ok(result.Value);
-            
-            return NotFound(result.Error);
+                return Ok(result.Data);
+
+            return NotFound();
         }
     }
-} 
+}

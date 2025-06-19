@@ -34,7 +34,7 @@ namespace Alwalid.Cms.Api.Features.Country.Queries.GetCountryById
                     BranchesCount = country.Branches?.Count ?? 0
                 };
 
-                return await Result<CountryResponseDto?>.SuccessAsync(responseDto, "Country retrieved successfully.");
+                return await Result<CountryResponseDto?>.SuccessAsync(responseDto, "Country retrieved successfully.", true);
             }
             catch (Exception ex)
             {

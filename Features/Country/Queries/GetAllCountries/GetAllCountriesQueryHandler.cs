@@ -29,7 +29,7 @@ namespace Alwalid.Cms.Api.Features.Country.Queries.GetAllCountries
                     BranchesCount = country.Branches?.Count ?? 0
                 });
 
-                return await Result<IEnumerable<CountryResponseDto>>.SuccessAsync(responseDtos, "Countries retrieved successfully.");
+                return await Result<IEnumerable<CountryResponseDto>>.SuccessAsync(responseDtos, "Countries retrieved successfully.", true);
             }
             catch (Exception ex)
             {

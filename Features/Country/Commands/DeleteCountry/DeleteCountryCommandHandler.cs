@@ -18,7 +18,7 @@ namespace Alwalid.Cms.Api.Features.Country.Commands.DeleteCountry
             try
             {
                 // Check if country exists
-                if (!await _countryRepository.ExistsAsync(command.Id))
+                if (await _countryRepository.ExistsAsync(command.Id) is true)
                 {
                     return await Result<bool>.FaildAsync(false, "Country not found.");
                 }
@@ -28,7 +28,7 @@ namespace Alwalid.Cms.Api.Features.Country.Commands.DeleteCountry
 
                 if (isDeleted)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Country deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Country deleted successfully.", true);
                 }
                 else
                 {

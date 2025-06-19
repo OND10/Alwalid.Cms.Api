@@ -26,7 +26,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Commands.UpdateBranch
                 }
 
                 // Validate unique constraints
-                if (await _branchRepository.ExistsInCountryAsync(command.CountryId, command.City, command.Address, command.Id))
+                if (await _branchRepository.ExistsInCountryAsync(command.CountryId, command.City) is true)
                 {
                     return await Result<Entities.Branch>.FaildAsync(false, "Branch already exists in this country with the same city and address.");
                 }
@@ -38,7 +38,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Commands.UpdateBranch
 
                 var updatedBranch = await _branchRepository.UpdateAsync(existingBranch);
 
-                return await Result<Entities.Branch>.SuccessAsync(updatedBranch, "Branch updated successfully.");
+                return await Result<Entities.Branch>.SuccessAsync(updatedBranch, "Branch updated successfully.", true);
             }
             catch (Exception ex)
             {

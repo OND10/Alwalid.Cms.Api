@@ -26,6 +26,7 @@ namespace Alwalid.Cms.Api.Features.Branch
             return await _context.Branches
                 .Include(b => b.Country)
                 .Include(b => b.Departments)
+                .AsNoTracking()
                 .ToListAsync();
         }
 
@@ -95,19 +96,11 @@ namespace Alwalid.Cms.Api.Features.Branch
             return await _context.Branches.AnyAsync(b => b.Id == id);
         }
 
-        public async Task<bool> ExistsInCountryAsync(int countryId, string city, string address, int? excludeId = null)
+        public async Task<bool> ExistsInCountryAsync(int countryId, string city)
         {
-            if (excludeId.HasValue)
-                return await _context.Branches.AnyAsync(b => 
-                    b.CountryId == countryId && 
-                    b.City == city && 
-                    b.Address == address && 
-                    b.Id != excludeId.Value);
-            
-            return await _context.Branches.AnyAsync(b => 
-                b.CountryId == countryId && 
-                b.City == city && 
-                b.Address == address);
+            return await _context.Branches.AnyAsync(b =>
+                b.CountryId == countryId &&
+                b.City == city);
         }
     }
-} 
+}

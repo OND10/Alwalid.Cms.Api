@@ -11,15 +11,15 @@ namespace Alwalid.Cms.Api.Data
         }
 
         // DbSet properties
-        public DbSet<Country>? Countries { get; set; }
-        public DbSet<Branch>? Branches { get; set; }
-        public DbSet<Department>? Departments { get; set; }
-        public DbSet<Category>? Categories { get; set; }
-        public DbSet<Product>? Products { get; set; }
-        public DbSet<ProductImage>? ProductImages { get; set; }
-        public DbSet<ProductStatistic>? ProductStatistics { get; set; }
-        public DbSet<Currency>? Currencies { get; set; }
-        public DbSet<Settings>? Settings { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Branch> Branches { get; set; }
+        public DbSet<Department> Departments { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<ProductStatistic> ProductStatistics { get; set; }
+        public DbSet<Currency> Currencies { get; set; }
+        public DbSet<Settings> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

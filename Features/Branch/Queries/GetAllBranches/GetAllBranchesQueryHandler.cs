@@ -19,7 +19,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Queries.GetAllBranches
             try
             {
                 var branches = await _branchRepository.GetAllAsync();
-                return await Result<IEnumerable<Entities.Branch>>.SuccessAsync(branches, "Branches retrieved successfully.");
+                return await Result<IEnumerable<Entities.Branch>>.SuccessAsync(branches, "Branches retrieved successfully.", true);
             }
             catch (Exception ex)
             {

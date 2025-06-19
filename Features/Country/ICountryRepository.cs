@@ -10,14 +10,14 @@ namespace Alwalid.Cms.Api.Features.Country
         Task<Entities.Country> CreateAsync(Entities.Country country);
         Task<Entities.Country> UpdateAsync(Entities.Country country);
         Task<bool> DeleteAsync(int id);
-        
+
         // Country-specific operations
         Task<Entities.Country?> GetByCodeAsync(string code);
         Task<Entities.Country?> GetByNameAsync(string name);
         Task<IEnumerable<Entities.Country>> GetActiveCountriesAsync();
-        Task<bool> IsCodeUniqueAsync(string code, int? excludeId = null);
-        Task<bool> IsNameUniqueAsync(string name, int? excludeId = null);
+        Task<bool> IsCodeUniqueAsync(string code);
+        Task<bool> IsNameUniqueAsync(string name);
         Task<int> GetTotalCountAsync();
         Task<bool> ExistsAsync(int id);
     }
-} 
+}

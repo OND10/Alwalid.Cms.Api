@@ -18,6 +18,6 @@ namespace Alwalid.Cms.Api.Features.Branch
         Task<int> GetTotalCountAsync();
         Task<int> GetCountByCountryAsync(int countryId);
         Task<bool> ExistsAsync(int id);
-        Task<bool> ExistsInCountryAsync(int countryId, string city, string address, int? excludeId = null);
+        Task<bool> ExistsInCountryAsync(int countryId, string city);
     }
 } 

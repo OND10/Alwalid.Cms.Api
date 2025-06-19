@@ -73,20 +73,14 @@ namespace Alwalid.Cms.Api.Features.Country
                 .ToListAsync();
         }
 
-        public async Task<bool> IsCodeUniqueAsync(string code, int? excludeId = null)
+        public async Task<bool> IsCodeUniqueAsync(string code)
         {
-            if (excludeId.HasValue)
-                return !await _context.Countries.AnyAsync(c => c.Code == code && c.Id != excludeId.Value);
-            
-            return !await _context.Countries.AnyAsync(c => c.Code == code);
+            return await _context.Countries.AnyAsync(c => c.Code == code);
         }
 
-        public async Task<bool> IsNameUniqueAsync(string name, int? excludeId = null)
+        public async Task<bool> IsNameUniqueAsync(string name)
         {
-            if (excludeId.HasValue)
-                return !await _context.Countries.AnyAsync(c => c.Name == name && c.Id != excludeId.Value);
-            
-            return !await _context.Countries.AnyAsync(c => c.Name == name);
+            return await _context.Countries.AnyAsync(c => c.Name == name);
         }
 
         public async Task<int> GetTotalCountAsync()

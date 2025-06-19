@@ -18,7 +18,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Commands.DeleteBranch
             try
             {
                 // Check if branch exists
-                if (!await _branchRepository.ExistsAsync(command.Id))
+                if (await _branchRepository.ExistsAsync(command.Id) is true)
                 {
                     return await Result<bool>.FaildAsync(false, "Branch not found.");
                 }
@@ -28,7 +28,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Commands.DeleteBranch
 
                 if (isDeleted)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Branch deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Branch deleted successfully.", true);
                 }
                 else
                 {

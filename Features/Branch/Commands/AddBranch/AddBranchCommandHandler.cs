@@ -20,9 +20,9 @@ namespace Alwalid.Cms.Api.Features.Branch.Commands.AddBranch
             try
             {
                 // Validate unique constraints
-                if (await _branchRepository.ExistsInCountryAsync(command.Request.CountryId, command.Request.City, command.Request.Address))
+                if (await _branchRepository.ExistsInCountryAsync(command.Request.CountryId, command.Request.City) is true)
                 {
-                    return await Result<BranchResponseDto>.FaildAsync(false, "Branch already exists in this country with the same city and address.");
+                    return await Result<BranchResponseDto>.FaildAsync(false, "Branch already exists in this country with the same city.");
                 }
 
                 // Create new branch
@@ -47,7 +47,7 @@ namespace Alwalid.Cms.Api.Features.Branch.Commands.AddBranch
                     DepartmentsCount = createdBranch.Departments?.Count ?? 0
                 };
 
-                return await Result<BranchResponseDto>.SuccessAsync(responseDto, "Branch created successfully.");
+                return await Result<BranchResponseDto>.SuccessAsync(responseDto, "Branch created successfully.", true);
             }
             catch (Exception ex)
             {

@@ -27,12 +27,12 @@ namespace Alwalid.Cms.Api.Features.Country.Commands.UpdateCountry
                 }
 
                 // Validate unique constraints
-                if (!await _countryRepository.IsCodeUniqueAsync(command.Request.Code, command.Id))
+                if (await _countryRepository.IsCodeUniqueAsync(command.Request.Code) is true)
                 {
                     return await Result<CountryResponseDto>.FaildAsync(false, "Country code already exists.");
                 }
 
-                if (!await _countryRepository.IsNameUniqueAsync(command.Request.Name, command.Id))
+                if (await _countryRepository.IsNameUniqueAsync(command.Request.Name) is true)
                 {
                     return await Result<CountryResponseDto>.FaildAsync(false, "Country name already exists.");
                 }
@@ -52,7 +52,7 @@ namespace Alwalid.Cms.Api.Features.Country.Commands.UpdateCountry
                     BranchesCount = updatedCountry.Branches?.Count ?? 0
                 };
 
-                return await Result<CountryResponseDto>.SuccessAsync(responseDto, "Country updated successfully.");
+                return await Result<CountryResponseDto>.SuccessAsync(responseDto, "Country updated successfully.", true);
             }
             catch (Exception ex)
             {
