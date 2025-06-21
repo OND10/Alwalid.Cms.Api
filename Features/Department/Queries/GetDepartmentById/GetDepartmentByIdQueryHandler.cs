@@ -6,7 +6,7 @@ using Alwalid.Cms.Api.Features.Department.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Department.Queries.GetDepartmentById
 {
-    public class GetDepartmentByIdQueryHandler : IQueryHandler<GetDepartmentByIdQuery, DepartmentResponseDto?>
+    public class GetDepartmentByIdQueryHandler : IQueryHandler<GetDepartmentByIdQuery, DepartmentResponseDto>
     {
         private readonly IDepartmentRepository _departmentRepository;
 
@@ -15,7 +15,7 @@ namespace Alwalid.Cms.Api.Features.Department.Queries.GetDepartmentById
             _departmentRepository = departmentRepository;
         }
 
-        public async Task<Result<DepartmentResponseDto?>> Handle(GetDepartmentByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<DepartmentResponseDto>> Handle(GetDepartmentByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Department.Queries.GetDepartmentById
                 
                 if (department == null)
                 {
-                    return await Result<DepartmentResponseDto?>.FaildAsync(false, "Department not found.");
+                    return await Result<DepartmentResponseDto>.FaildAsync(false, "Department not found.");
                 }
 
                 var responseDto = new DepartmentResponseDto
@@ -37,11 +37,11 @@ namespace Alwalid.Cms.Api.Features.Department.Queries.GetDepartmentById
                     ProductsCount = department.Products?.Count ?? 0
                 };
 
-                return await Result<DepartmentResponseDto?>.SuccessAsync(responseDto, "Department retrieved successfully.");
+                return await Result<DepartmentResponseDto>.SuccessAsync(responseDto, "Department retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<DepartmentResponseDto?>.FaildAsync(false, $"Error retrieving department: {ex.Message}");
+                return await Result<DepartmentResponseDto>.FaildAsync(false, $"Error retrieving department: {ex.Message}");
             }
         }
     }

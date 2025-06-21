@@ -21,7 +21,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.SoftDeleteCategory
             try
             {
                 // Check if category exists
-                if (!await _categoryRepository.ExistsAsync(command.Id))
+                if (await _categoryRepository.ExistsAsync(command.Id) is true)
                 {
                     return await Result<bool>.FaildAsync(false, "Category not found.");
                 }
@@ -35,7 +35,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.SoftDeleteCategory
                     _memoryCache.Remove("GetAllCategories");
                     _memoryCache.Remove("GetActiveCategories");
 
-                    return await Result<bool>.SuccessAsync(true, "Category soft deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Category soft deleted successfully.", true);
                 }
                 else
                 {

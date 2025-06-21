@@ -27,7 +27,7 @@ namespace Alwalid.Cms.Api.Features.Department.Commands.UpdateDepartment
                 }
 
                 // Validate unique constraints
-                if (await _departmentRepository.ExistsInBranchAsync(command.Request.BranchId, command.Request.EnglishName, command.Request.ArabicName, command.Id))
+                if (await _departmentRepository.ExistsInBranchAsync(command.Request.BranchId, command.Request.EnglishName, command.Request.ArabicName, command.Id) is true)
                 {
                     return await Result<DepartmentResponseDto>.FaildAsync(false, "Department already exists in this branch with the same name.");
                 }
@@ -51,7 +51,7 @@ namespace Alwalid.Cms.Api.Features.Department.Commands.UpdateDepartment
                     ProductsCount = updatedDepartment.Products?.Count ?? 0
                 };
 
-                return await Result<DepartmentResponseDto>.SuccessAsync(responseDto, "Department updated successfully.");
+                return await Result<DepartmentResponseDto>.SuccessAsync(responseDto, "Department updated successfully.", true);
             }
             catch (Exception ex)
             {

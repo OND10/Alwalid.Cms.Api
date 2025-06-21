@@ -30,7 +30,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.UpdateCategory
                 }
 
                 // Validate unique constraints
-                if (await _categoryRepository.ExistsInDepartmentAsync(command.Request.DepartmentId, command.Request.EnglishName, command.Request.ArabicName, command.Id))
+                if (await _categoryRepository.ExistsInDepartmentAsync(command.Request.DepartmentId, command.Request.EnglishName, command.Request.ArabicName, command.Id) is true)
                 {
                     return await Result<CategoryResponseDto>.FaildAsync(false, "Category already exists in this department with the same name.");
                 }
@@ -60,7 +60,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.UpdateCategory
                 _memoryCache.Remove("GetAllCategories");
                 _memoryCache.Remove("GetActiveCategories");
 
-                return await Result<CategoryResponseDto>.SuccessAsync(responseDto, "Category updated successfully.");
+                return await Result<CategoryResponseDto>.SuccessAsync(responseDto, "Category updated successfully.", true);
             }
             catch (Exception ex)
             {

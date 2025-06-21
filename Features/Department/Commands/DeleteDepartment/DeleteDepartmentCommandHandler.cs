@@ -18,7 +18,7 @@ namespace Alwalid.Cms.Api.Features.Department.Commands.DeleteDepartment
             try
             {
                 // Check if department exists
-                if (!await _departmentRepository.ExistsAsync(command.Id))
+                if (await _departmentRepository.ExistsAsync(command.Id) is true)
                 {
                     return await Result<bool>.FaildAsync(false, "Department not found.");
                 }
@@ -28,7 +28,7 @@ namespace Alwalid.Cms.Api.Features.Department.Commands.DeleteDepartment
 
                 if (isDeleted)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Department deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Department deleted successfully.", true);
                 }
                 else
                 {

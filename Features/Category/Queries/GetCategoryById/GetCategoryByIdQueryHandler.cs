@@ -6,7 +6,7 @@ using Alwalid.Cms.Api.Features.Category.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Category.Queries.GetCategoryById
 {
-    public class GetCategoryByIdQueryHandler : IQueryHandler<GetCategoryByIdQuery, CategoryResponseDto?>
+    public class GetCategoryByIdQueryHandler : IQueryHandler<GetCategoryByIdQuery, CategoryResponseDto>
     {
         private readonly ICategoryRepository _categoryRepository;
 
@@ -15,7 +15,7 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetCategoryById
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Result<CategoryResponseDto?>> Handle(GetCategoryByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<CategoryResponseDto>> Handle(GetCategoryByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetCategoryById
                 
                 if (category == null)
                 {
-                    return await Result<CategoryResponseDto?>.FaildAsync(false, "Category not found.");
+                    return await Result<CategoryResponseDto>.FaildAsync(false, "Category not found.");
                 }
 
                 var responseDto = new CategoryResponseDto
@@ -39,11 +39,11 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetCategoryById
                     IsDeleted = category.IsDeleted
                 };
 
-                return await Result<CategoryResponseDto?>.SuccessAsync(responseDto, "Category retrieved successfully.");
+                return await Result<CategoryResponseDto>.SuccessAsync(responseDto, "Category retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<CategoryResponseDto?>.FaildAsync(false, $"Error retrieving category: {ex.Message}");
+                return await Result<CategoryResponseDto>.FaildAsync(false, $"Error retrieving category: {ex.Message}");
             }
         }
     }

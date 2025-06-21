@@ -40,7 +40,7 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetActiveCategories
                         IsDeleted = category.IsDeleted
                     });
 
-                    categories = await Result<IEnumerable<CategoryResponseDto>>.SuccessAsync(responseDtos, "Active categories retrieved successfully.");
+                    categories = await Result<IEnumerable<CategoryResponseDto>>.SuccessAsync(responseDtos, "Active categories retrieved successfully.", true);
 
                     if (categories.Data.Count() > 0)
                     {

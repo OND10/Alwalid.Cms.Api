@@ -105,13 +105,7 @@ namespace Alwalid.Cms.Api.Features.Department
         }
 
         public async Task<bool> ExistsInBranchAsync(int branchId, string englishName, string arabicName, int? excludeId = null)
-        {
-            if (excludeId.HasValue)
-                return await _context.Departments.AnyAsync(d => 
-                    d.BranchId == branchId && 
-                    (d.EnglishName == englishName || d.ArabicName == arabicName) && 
-                    d.Id != excludeId.Value);
-            
+        {  
             return await _context.Departments.AnyAsync(d => 
                 d.BranchId == branchId && 
                 (d.EnglishName == englishName || d.ArabicName == arabicName));

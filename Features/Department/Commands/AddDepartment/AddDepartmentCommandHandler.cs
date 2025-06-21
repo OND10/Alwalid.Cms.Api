@@ -20,7 +20,7 @@ namespace Alwalid.Cms.Api.Features.Department.Commands.AddDepartment
             try
             {
                 // Validate unique constraints
-                if (await _departmentRepository.ExistsInBranchAsync(command.Request.BranchId, command.Request.EnglishName, command.Request.ArabicName))
+                if (await _departmentRepository.ExistsInBranchAsync(command.Request.BranchId, command.Request.EnglishName, command.Request.ArabicName) is true)
                 {
                     return await Result<DepartmentResponseDto>.FaildAsync(false, "Department already exists in this branch with the same name.");
                 }
@@ -42,7 +42,7 @@ namespace Alwalid.Cms.Api.Features.Department.Commands.AddDepartment
                     BranchId = createdDepartment.BranchId,
                 };
 
-                return await Result<DepartmentResponseDto>.SuccessAsync(mappedResponse, "Department created successfully.");
+                return await Result<DepartmentResponseDto>.SuccessAsync(mappedResponse, "Department created successfully.", true);
             }
             catch (Exception ex)
             {

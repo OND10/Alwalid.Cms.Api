@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.AddCategory
             try
             {
                 // Validate unique constraints
-                if (await _categoryRepository.ExistsInDepartmentAsync(command.Request.DepartmentId, command.Request.EnglishName, command.Request.ArabicName))
+                if (await _categoryRepository.ExistsInDepartmentAsync(command.Request.DepartmentId, command.Request.EnglishName, command.Request.ArabicName) is true)
                 {
                     return await Result<CategoryResponseDto>.FaildAsync(false, "Category already exists in this department with the same name.");
                 }
@@ -56,7 +56,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.AddCategory
                 _memoryCache.Remove("GetAllCategories");
                 _memoryCache.Remove("GetActiveCategories");
 
-                return await Result<CategoryResponseDto>.SuccessAsync(responseDto, "Category created successfully.");
+                return await Result<CategoryResponseDto>.SuccessAsync(responseDto, "Category created successfully.", true);
             }
             catch (Exception ex)
             {

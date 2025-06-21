@@ -106,12 +106,6 @@ namespace Alwalid.Cms.Api.Features.Category
 
         public async Task<bool> ExistsInDepartmentAsync(int departmentId, string englishName, string arabicName, int? excludeId = null)
         {
-            if (excludeId.HasValue)
-                return await _context.Categories.AnyAsync(c => 
-                    c.DepartmentId == departmentId && 
-                    (c.EnglishName == englishName || c.ArabicName == arabicName) && 
-                    c.Id != excludeId.Value);
-            
             return await _context.Categories.AnyAsync(c => 
                 c.DepartmentId == departmentId && 
                 (c.EnglishName == englishName || c.ArabicName == arabicName));

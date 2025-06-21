@@ -32,7 +32,7 @@ namespace Alwalid.Cms.Api.Features.Department.Queries.GetAllDepartments
                     ProductsCount = department.Products?.Count ?? 0
                 });
 
-                return await Result<IEnumerable<DepartmentResponseDto>>.SuccessAsync(responseDtos, "Departments retrieved successfully.");
+                return await Result<IEnumerable<DepartmentResponseDto>>.SuccessAsync(responseDtos, "Departments retrieved successfully.", true);
             }
             catch (Exception ex)
             {
