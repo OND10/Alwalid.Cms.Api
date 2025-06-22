@@ -24,11 +24,11 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.UpdateDefaultLanguage
                 }
 
                 // Update default language
-                var isUpdated = await _settingsRepository.UpdateDefaultLanguageAsync(command.DefaultLanguage);
+                var isUpdated = await _settingsRepository.UpdateDefaultLanguageAsync(command.Request.DefaultLanguage);
 
                 if (isUpdated)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Default language updated successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Default language updated successfully.", true);
                 }
                 else
                 {

@@ -27,7 +27,7 @@ namespace Alwalid.Cms.Api.Features.Product.Commands.UpdateStock
                 }
 
                 // Update stock
-                var isUpdated = await _productRepository.UpdateStockAsync(command.Id, command.NewStock);
+                var isUpdated = await _productRepository.UpdateStockAsync(command.Id, command.Request.NewStock);
 
                 if (isUpdated)
                 {
@@ -35,7 +35,7 @@ namespace Alwalid.Cms.Api.Features.Product.Commands.UpdateStock
                     _memoryCache.Remove("GetAllProducts");
                     _memoryCache.Remove("GetActiveProducts");
 
-                    return await Result<bool>.SuccessAsync(true, "Product stock updated successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Product stock updated successfully.", true);
                 }
                 else
                 {

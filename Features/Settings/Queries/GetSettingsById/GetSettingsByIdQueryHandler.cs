@@ -6,7 +6,7 @@ using Alwalid.Cms.Api.Features.Settings.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Settings.Queries.GetSettingsById
 {
-    public class GetSettingsByIdQueryHandler : IQueryHandler<GetSettingsByIdQuery, SettingsResponseDto?>
+    public class GetSettingsByIdQueryHandler : IQueryHandler<GetSettingsByIdQuery, SettingsResponseDto>
     {
         private readonly ISettingsRepository _settingsRepository;
 
@@ -15,7 +15,7 @@ namespace Alwalid.Cms.Api.Features.Settings.Queries.GetSettingsById
             _settingsRepository = settingsRepository;
         }
 
-        public async Task<Result<SettingsResponseDto?>> Handle(GetSettingsByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<SettingsResponseDto>> Handle(GetSettingsByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,25 +23,36 @@ namespace Alwalid.Cms.Api.Features.Settings.Queries.GetSettingsById
 
                 if (settings == null)
                 {
-                    return await Result<SettingsResponseDto?>.FaildAsync(false, "Settings not found.");
+                    return await Result<SettingsResponseDto>.FaildAsync(false, "Settings not found.");
                 }
 
                 var responseDto = new SettingsResponseDto
                 {
                     Id = settings.Id,
                     DefaultLanguage = settings.DefaultLanguage,
-                    //DefaultCurrencyId = settings.DefaultCurrencyId,
-                    //MaintenanceMode = settings.MaintenanceMode,
-                    //CreatedAt = settings.CreatedAt,
-                    //LastModifiedAt = settings.LastModifiedAt,
-                    //IsDeleted = settings.IsDeleted
+                    DefaultCurrencyCode = settings.DefaultCurrencyCode,
+                    IsMaintenanceMode = settings.IsMaintenanceMode,
+                    Address = settings.Address,
+                    Copyright = settings.Copyright,
+                    Facebook = settings.Facebook,
+                    FaviconUrl = settings.FaviconUrl,
+                    Instagram = settings.Instagram,
+                    LinkedIn = settings.LinkedIn,
+                    LogoUrl = settings.LogoUrl,
+                    SiteSubtitle = settings.SiteSubtitle,
+                    SiteTitle = settings.SiteTitle,
+                    Phone = settings.Phone,
+                    Twitter = settings.Twitter,
+                    Youtube = settings.Youtube,
+                    SupportEmail = settings.SupportEmail,
+                    Tiktok = settings.Tiktok,
                 };
 
-                return await Result<SettingsResponseDto?>.SuccessAsync(responseDto, "Settings retrieved successfully.");
+                return await Result<SettingsResponseDto>.SuccessAsync(responseDto, "Settings retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<SettingsResponseDto?>.FaildAsync(false, $"Error retrieving settings: {ex.Message}");
+                return await Result<SettingsResponseDto>.FaildAsync(false, $"Error retrieving settings: {ex.Message}");
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Currency.Commands.AddCurrency
             try
             {
                 // Validate unique constraints
-                if (await _currencyRepository.ExistsByCodeAsync(command.Request.Code))
+                if (await _currencyRepository.ExistsByCodeAsync(command.Request.Code) is true)
                 {
                     return await Result<CurrencyResponseDto>.FaildAsync(false, "Currency with this code already exists.");
                 }
@@ -61,7 +61,7 @@ namespace Alwalid.Cms.Api.Features.Currency.Commands.AddCurrency
                 _memoryCache.Remove("GetAllCurrencies");
                 _memoryCache.Remove("GetActiveCurrencies");
 
-                return await Result<CurrencyResponseDto>.SuccessAsync(responseDto, "Currency created successfully.");
+                return await Result<CurrencyResponseDto>.SuccessAsync(responseDto, "Currency created successfully.", true);
             }
             catch (Exception ex)
             {

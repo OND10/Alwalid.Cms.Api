@@ -28,7 +28,7 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.DeleteSettings
 
                 if (isDeleted)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Settings deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Settings deleted successfully.", true);
                 }
                 else
                 {

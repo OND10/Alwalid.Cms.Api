@@ -22,8 +22,22 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.AddSettings
                 var settings = new Entities.Settings
                 {
                     DefaultLanguage = command.Request.DefaultLanguage,
-                    //DefaultCurrencyId = command.Request.DefaultCurrencyId,
-                    //MaintenanceMode = command.Request.MaintenanceMode
+                    DefaultCurrencyCode = command.Request.DefaultCurrencyCode,
+                    IsMaintenanceMode = command.Request.IsMaintenanceMode,
+                    Address = command.Request.Address,
+                    Copyright = command.Request.Copyright,
+                    Facebook = command.Request.Facebook,
+                    FaviconUrl = command.Request.FaviconUrl,
+                    Instagram = command.Request.Instagram,
+                    LinkedIn = command.Request.LinkedIn,
+                    LogoUrl = command.Request.LogoUrl,
+                    SiteSubtitle = command.Request.SiteSubtitle,
+                    SiteTitle = command.Request.SiteTitle,
+                    Phone = command.Request.Phone,
+                    Twitter = command.Request.Twitter,
+                    Youtube = command.Request.Youtube,
+                    SupportEmail = command.Request.SupportEmail,
+                    Tiktok = command.Request.Tiktok,
                 };
 
                 var createdSettings = await _settingsRepository.CreateAsync(settings);
@@ -32,14 +46,25 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.AddSettings
                 {
                     Id = createdSettings.Id,
                     DefaultLanguage = createdSettings.DefaultLanguage,
-                    //DefaultCurrencyId = createdSettings.DefaultCurrencyId,
-                    //MaintenanceMode = createdSettings.MaintenanceMode,
-                    //CreatedAt = createdSettings.CreatedAt,
-                    //LastModifiedAt = createdSettings.LastModifiedAt,
-                    //IsDeleted = createdSettings.IsDeleted
+                    DefaultCurrencyCode = createdSettings.DefaultCurrencyCode,
+                    IsMaintenanceMode = createdSettings.IsMaintenanceMode,
+                    Address = createdSettings.Address,
+                    Copyright = createdSettings.Copyright,
+                    Facebook = createdSettings.Facebook,
+                    FaviconUrl = createdSettings.FaviconUrl,
+                    Instagram = createdSettings.Instagram,
+                    LinkedIn = createdSettings.LinkedIn,
+                    LogoUrl = createdSettings.LogoUrl,
+                    SiteSubtitle = createdSettings.SiteSubtitle,
+                    SiteTitle = createdSettings.SiteTitle,
+                    Phone = createdSettings.Phone,
+                    Twitter = createdSettings.Twitter,
+                    Youtube = createdSettings.Youtube,
+                    SupportEmail = createdSettings.SupportEmail,
+                    Tiktok = createdSettings.Tiktok,
                 };
 
-                return await Result<SettingsResponseDto>.SuccessAsync(responseDto, "Settings created successfully.");
+                return await Result<SettingsResponseDto>.SuccessAsync(responseDto, "Settings created successfully.", true);
             }
             catch (Exception ex)
             {
@@ -47,4 +72,4 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.AddSettings
             }
         }
     }
-} 
+}

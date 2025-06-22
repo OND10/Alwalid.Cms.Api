@@ -49,7 +49,7 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Commands.AddProductImage
                 ImageUrl = created.ImageUrl
             };
 
-            return await Result<ProductImageResponseDto>.SuccessAsync(response, "Image uploaded successfully.");
+            return await Result<ProductImageResponseDto>.SuccessAsync(response, "Image uploaded successfully.", true);
         }
     }
 }

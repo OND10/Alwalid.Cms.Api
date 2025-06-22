@@ -35,7 +35,7 @@ namespace Alwalid.Cms.Api.Features.Currency.Commands.DeleteCurrency
                     _memoryCache.Remove("GetAllCurrencies");
                     _memoryCache.Remove("GetActiveCurrencies");
 
-                    return await Result<bool>.SuccessAsync(true, "Currency deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Currency deleted successfully.", true);
                 }
                 else
                 {

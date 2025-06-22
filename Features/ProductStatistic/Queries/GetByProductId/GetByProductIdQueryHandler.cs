@@ -27,9 +27,10 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByProductId
                     ProductId = statistic.ProductId,
                     ProductName = statistic.Product?.EnglishName ?? string.Empty,
                     Date = statistic.Date,
+                    QuantitySold = statistic.QuantitySold
                 });
 
-                return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Product statistics retrieved successfully.");
+                return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Product statistics retrieved successfully.", true);
             }
             catch (Exception ex)
             {

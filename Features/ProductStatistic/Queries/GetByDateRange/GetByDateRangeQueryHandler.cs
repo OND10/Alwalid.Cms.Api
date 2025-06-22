@@ -33,9 +33,10 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByDateRange
                     //CreatedAt = statistic.CreatedAt,
                     //LastModifiedAt = statistic.LastModifiedAt,
                     //IsDeleted = statistic.IsDeleted
+                    QuantitySold = statistic.QuantitySold
                 });
 
-                return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Product statistics retrieved successfully.");
+                return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Product statistics retrieved successfully.", true);
             }
             catch (Exception ex)
             {

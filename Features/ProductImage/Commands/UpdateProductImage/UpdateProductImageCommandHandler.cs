@@ -44,9 +44,9 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Commands.UpdateProductImage
                 }
 
                 // Handle image upload if provided
-                if (command.Image != null)
+                if (command.Request.image != null)
                 {
-                    var imageUrl = await _imageRepository.Upload(product, command.Image);
+                    var imageUrl = await _imageRepository.Upload(product, command.Request.image);
                     if (!string.IsNullOrEmpty(imageUrl))
                     {
                         existingImage.ImageUrl = imageUrl;
@@ -69,7 +69,7 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Commands.UpdateProductImage
                     //IsDeleted = updatedImage.IsDeleted
                 };
 
-                return await Result<ProductImageResponseDto>.SuccessAsync(responseDto, "Product image updated successfully.");
+                return await Result<ProductImageResponseDto>.SuccessAsync(responseDto, "Product image updated successfully.", true);
             }
             catch (Exception ex)
             {

@@ -24,11 +24,11 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.UpdateDefaultCurrency
                 }
 
                 // Update default currency
-                var isUpdated = await _settingsRepository.UpdateDefaultCurrencyAsync(command.DefaultCurrency);
+                var isUpdated = await _settingsRepository.UpdateDefaultCurrencyAsync(command.Request.DefaultCurrency);
 
                 if (isUpdated)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Default currency updated successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Default currency updated successfully.", true);
                 }
                 else
                 {

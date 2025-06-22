@@ -41,7 +41,7 @@ namespace Alwalid.Cms.Api.Features.Currency.Queries.GetActiveCurrencies
                         //IsDeleted = currency.IsDeleted
                     });
 
-                    currencies = await Result<IEnumerable<CurrencyResponseDto>>.SuccessAsync(responseDtos, "Active currencies retrieved successfully.");
+                    currencies = await Result<IEnumerable<CurrencyResponseDto>>.SuccessAsync(responseDtos, "Active currencies retrieved successfully.", true);
 
                     if (currencies.Data.Count() > 0)
                     {

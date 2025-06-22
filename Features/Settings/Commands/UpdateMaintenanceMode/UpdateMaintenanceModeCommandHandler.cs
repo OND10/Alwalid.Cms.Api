@@ -24,11 +24,11 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.UpdateMaintenanceMode
                 }
 
                 // Update maintenance mode
-                var isUpdated = await _settingsRepository.UpdateMaintenanceModeAsync(command.MaintenanceMode);
+                var isUpdated = await _settingsRepository.UpdateMaintenanceModeAsync(command.Request.MaintenanceMode);
 
                 if (isUpdated)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Maintenance mode updated successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Maintenance mode updated successfully.", true);
                 }
                 else
                 {

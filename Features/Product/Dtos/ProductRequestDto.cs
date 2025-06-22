@@ -11,5 +11,6 @@ namespace Alwalid.Cms.Api.Features.Product.Dtos
         public int DepartmentId { get; set; }
         public int? CategoryId { get; set; }
         public int? CurrencyId { get; set; }
+        public IFormFile? Image { get; set; }
     }
 } 

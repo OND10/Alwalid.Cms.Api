@@ -29,6 +29,7 @@ namespace Alwalid.Cms.Api.Features.Product
             return await _context.Products
                 .Include(p => p.Department)
                 .Include(p => p.Category)
+                .Include(p=>p.Currency)
                 .Include(p => p.Images)
                 .Include(p => p.Statistics)
                 .ToListAsync();

@@ -49,7 +49,7 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetActiveProducts
                         IsDeleted = product.IsDeleted
                     });
 
-                    products = await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDtos, "Active products retrieved successfully.");
+                    products = await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDtos, "Active products retrieved successfully.", true);
 
                     if (products.Data.Count() > 0)
                     {

@@ -21,7 +21,7 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.SoftDeleteCategory
             try
             {
                 // Check if category exists
-                if (await _categoryRepository.ExistsAsync(command.Id) is true)
+                if (await _categoryRepository.ExistsAsync(command.Id) is false)
                 {
                     return await Result<bool>.FaildAsync(false, "Category not found.");
                 }

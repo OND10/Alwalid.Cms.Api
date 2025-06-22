@@ -6,7 +6,7 @@ using Alwalid.Cms.Api.Features.Product.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Product.Queries.GetProductById
 {
-    public class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, ProductResponseDto?>
+    public class GetProductByIdQueryHandler : IQueryHandler<GetProductByIdQuery, ProductResponseDto>
     {
         private readonly IProductRepository _productRepository;
 
@@ -15,7 +15,7 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetProductById
             _productRepository = productRepository;
         }
 
-        public async Task<Result<ProductResponseDto?>> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<ProductResponseDto>> Handle(GetProductByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetProductById
                 
                 if (product == null)
                 {
-                    return await Result<ProductResponseDto?>.FaildAsync(false, "Product not found.");
+                    return await Result<ProductResponseDto>.FaildAsync(false, "Product not found.");
                 }
 
                 var responseDto = new ProductResponseDto
@@ -48,11 +48,11 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetProductById
                     IsDeleted = product.IsDeleted
                 };
 
-                return await Result<ProductResponseDto?>.SuccessAsync(responseDto, "Product retrieved successfully.");
+                return await Result<ProductResponseDto>.SuccessAsync(responseDto, "Product retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<ProductResponseDto?>.FaildAsync(false, $"Error retrieving product: {ex.Message}");
+                return await Result<ProductResponseDto>.FaildAsync(false, $"Error retrieving product: {ex.Message}");
             }
         }
     }

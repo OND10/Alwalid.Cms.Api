@@ -47,7 +47,7 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetLowStockProducts
                     IsDeleted = x.IsDeleted
                 });
 
-                return await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDto, "Product retrieved successfully.");
+                return await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDto, "Product retrieved successfully.", true);
             }
             catch (Exception ex)
             {

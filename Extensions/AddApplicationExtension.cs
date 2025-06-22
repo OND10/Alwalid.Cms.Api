@@ -34,7 +34,11 @@ using Alwalid.Cms.Api.Features.Currency.Commands.UpdateCurrency;
 using Alwalid.Cms.Api.Features.Currency.Dtos;
 using Alwalid.Cms.Api.Features.Currency.Queries.GetActiveCurrencies;
 using Alwalid.Cms.Api.Features.Currency.Queries.GetAllCurrencies;
+using Alwalid.Cms.Api.Features.Currency.Queries.GetByCode;
+using Alwalid.Cms.Api.Features.Currency.Queries.GetByName;
+using Alwalid.Cms.Api.Features.Currency.Queries.GetBySymbol;
 using Alwalid.Cms.Api.Features.Currency.Queries.GetCurrencyById;
+using Alwalid.Cms.Api.Features.Currency.Queries.GetTotalCount;
 using Alwalid.Cms.Api.Features.Department;
 using Alwalid.Cms.Api.Features.Department.Commands.AddDepartment;
 using Alwalid.Cms.Api.Features.Department.Commands.DeleteDepartment;
@@ -108,21 +112,21 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICommandHandler<UpdateCountryCommand, CountryResponseDto>, UpdateCountryCommandHandler>();
             services.AddScoped<ICommandHandler<DeleteCountryCommand, bool>, DeleteCountryCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllCountriesQuery, IEnumerable<CountryResponseDto>>, GetAllCountriesQueryHandler>();
-            services.AddScoped<IQueryHandler<GetCountryByIdQuery, CountryResponseDto?>, GetCountryByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetCountryByIdQuery, CountryResponseDto>, GetCountryByIdQueryHandler>();
 
             // Register Branch handlers
             services.AddScoped<ICommandHandler<AddBranchCommand, BranchResponseDto>, AddBranchCommandHandler>();
             services.AddScoped<ICommandHandler<UpdateBranchCommand, Branch>, UpdateBranchCommandHandler>();
             services.AddScoped<ICommandHandler<DeleteBranchCommand, bool>, DeleteBranchCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllBranchesQuery, IEnumerable<Branch>>, GetAllBranchesQueryHandler>();
-            services.AddScoped<IQueryHandler<GetBranchByIdQuery, Branch?>, GetBranchByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetBranchByIdQuery, Branch>, GetBranchByIdQueryHandler>();
 
             // Register Department handlers
             services.AddScoped<ICommandHandler<AddDepartmentCommand, DepartmentResponseDto>, AddDepartmentCommandHandler>();
             services.AddScoped<ICommandHandler<UpdateDepartmentCommand, DepartmentResponseDto>, UpdateDepartmentCommandHandler>();
             services.AddScoped<ICommandHandler<DeleteDepartmentCommand, bool>, DeleteDepartmentCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllDepartmentsQuery, IEnumerable<DepartmentResponseDto>>, GetAllDepartmentsQueryHandler>();
-            services.AddScoped<IQueryHandler<GetDepartmentByIdQuery, DepartmentResponseDto?>, GetDepartmentByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetDepartmentByIdQuery, DepartmentResponseDto>, GetDepartmentByIdQueryHandler>();
 
             // Register Category handlers
             services.AddScoped<ICommandHandler<AddCategoryCommand, CategoryResponseDto>, AddCategoryCommandHandler>();
@@ -130,7 +134,7 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICommandHandler<DeleteCategoryCommand, bool>, DeleteCategoryCommandHandler>();
             services.AddScoped<ICommandHandler<SoftDeleteCategoryCommand, bool>, SoftDeleteCategoryCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllCategoriesQuery, IEnumerable<CategoryResponseDto>>, GetAllCategoriesQueryHandler>();
-            services.AddScoped<IQueryHandler<GetCategoryByIdQuery, CategoryResponseDto?>, GetCategoryByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetCategoryByIdQuery, CategoryResponseDto>, GetCategoryByIdQueryHandler>();
             services.AddScoped<IQueryHandler<GetActiveCategoriesQuery, IEnumerable<CategoryResponseDto>>, GetActiveCategoriesQueryHandler>();
 
             // Register Product handlers
@@ -140,7 +144,7 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICommandHandler<SoftDeleteProductCommand, bool>, SoftDeleteProductCommandHandler>();
             services.AddScoped<ICommandHandler<UpdateStockCommand, bool>, UpdateStockCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllProductsQuery, IEnumerable<ProductResponseDto>>, GetAllProductsQueryHandler>();
-            services.AddScoped<IQueryHandler<GetProductByIdQuery, ProductResponseDto?>, GetProductByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetProductByIdQuery, ProductResponseDto>, GetProductByIdQueryHandler>();
             services.AddScoped<IQueryHandler<GetActiveProductsQuery, IEnumerable<ProductResponseDto>>, GetActiveProductsQueryHandler>();
             services.AddScoped<IQueryHandler<SearchProductsQuery, IEnumerable<ProductResponseDto>>, SearchProductsQueryHandler>();
             services.AddScoped<IQueryHandler<GetLowStockProductsQuery, IEnumerable<ProductResponseDto>>, GetLowStockProductsQueryHandler>();
@@ -159,7 +163,7 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICommandHandler<UpdateProductStatisticCommand, ProductStatisticResponseDto>, UpdateProductStatisticCommandHandler>();
             services.AddScoped<ICommandHandler<DeleteProductStatisticCommand, bool>, DeleteProductStatisticCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllProductStatisticsQuery, IEnumerable<ProductStatisticResponseDto>>, GetAllProductStatisticsQueryHandler>();
-            //services.AddScoped<IQueryHandler<GetProductStatisticByIdQuery, ProductStatisticResponseDto?>, GetProductStatisticByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetProductStatisticByIdQuery, ProductStatisticResponseDto>, GetProductStatisticByIdQueryHandler>();
             services.AddScoped<IQueryHandler<GetByProductIdForStatisticQuery, IEnumerable<ProductStatisticResponseDto>>, GetByProductIdForStatisticQueryHandler>();
             services.AddScoped<IQueryHandler<GetByDateRangeQuery, IEnumerable<ProductStatisticResponseDto>>, GetByDateRangeQueryHandler>();
             services.AddScoped<IQueryHandler<GetTopSellingProductsQuery, IEnumerable<ProductStatisticResponseDto>>, GetTopSellingProductsQueryHandler>();
@@ -169,8 +173,12 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICommandHandler<UpdateCurrencyCommand, CurrencyResponseDto>, UpdateCurrencyCommandHandler>();
             services.AddScoped<ICommandHandler<DeleteCurrencyCommand, bool>, DeleteCurrencyCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllCurrenciesQuery, IEnumerable<CurrencyResponseDto>>, GetAllCurrenciesQueryHandler>();
-            //services.AddScoped<IQueryHandler<GetCurrencyByIdQuery, CurrencyResponseDto?>, GetCurrencyByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetCurrencyByIdQuery, CurrencyResponseDto>, GetCurrencyByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetByCodeQuery, CurrencyResponseDto>, GetByCodeQueryHandler>();
+            services.AddScoped<IQueryHandler<GetByNameQuery, CurrencyResponseDto>, GetByNameQueryHandler>();
+            services.AddScoped<IQueryHandler<GetBySymbolQuery, CurrencyResponseDto>, GetBySymbolQueryHandler>();
             services.AddScoped<IQueryHandler<GetActiveCurrenciesQuery, IEnumerable<CurrencyResponseDto>>, GetActiveCurrenciesQueryHandler>();
+            services.AddScoped<IQueryHandler<GetTotalCountQuery, int>, GetTotalCountQueryHandler>();
 
             // Register Settings handlers
             services.AddScoped<ICommandHandler<AddSettingsCommand, SettingsResponseDto>, AddSettingsCommandHandler>();

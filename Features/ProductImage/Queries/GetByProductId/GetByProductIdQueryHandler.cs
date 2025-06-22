@@ -32,7 +32,7 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Queries.GetByProductId
                     //IsDeleted = image.IsDeleted
                 });
 
-                return await Result<IEnumerable<ProductImageResponseDto>>.SuccessAsync(responseDtos, "Product images retrieved successfully.");
+                return await Result<IEnumerable<ProductImageResponseDto>>.SuccessAsync(responseDtos, "Product images retrieved successfully.", true);
             }
             catch (Exception ex)
             {

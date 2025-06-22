@@ -50,9 +50,9 @@ namespace Alwalid.Cms.Api.Features.Product.Commands.AddProduct
                 var createdProduct = await _productRepository.CreateAsync(product);
 
                 // Handle image upload if provided
-                if (command.Image != null)
+                if (command.Request.Image != null)
                 {
-                    var imageUrl = await _imageRepository.Upload(product, command.Image);
+                    var imageUrl = await _imageRepository.Upload(product, command.Request.Image);
                     
                     if (!string.IsNullOrEmpty(imageUrl))
                     {
@@ -93,7 +93,7 @@ namespace Alwalid.Cms.Api.Features.Product.Commands.AddProduct
                 _memoryCache.Remove("GetAllProducts");
                 _memoryCache.Remove("GetActiveProducts");
 
-                return await Result<ProductResponseDto>.SuccessAsync(responseDto, "Product created successfully.");
+                return await Result<ProductResponseDto>.SuccessAsync(responseDto, "Product created successfully.", true);
             }
             catch (Exception ex)
             {

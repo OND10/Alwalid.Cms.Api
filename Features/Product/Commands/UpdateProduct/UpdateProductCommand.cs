@@ -8,6 +8,6 @@ namespace Alwalid.Cms.Api.Features.Product.Commands.UpdateProduct
     {
         public int Id { get; set; }
         public ProductRequestDto Request { get; set; } = new();
-        public IFormFile? Image { get; set; }
+        //public IFormFile? Image { get; set; }
     }
 } 

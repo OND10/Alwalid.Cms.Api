@@ -19,7 +19,7 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetTopSellingProduct
         {
             try
             {
-                var result = await _productStatisticRepository.GetTopSellingProductsAsync(query.Top, query.startDate, query.endDate);
+                var result = await _productStatisticRepository.GetTopSellingProductsAsync(query.Request.Top, query.Request.startDate, query.Request.endDate);
 
                 var responseDtos = result.Select(statistic => new ProductStatisticResponseDto
                 {
@@ -33,9 +33,10 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetTopSellingProduct
                     //CreatedAt = statistic.CreatedAt,
                     //LastModifiedAt = statistic.LastModifiedAt,
                     //IsDeleted = statistic.IsDeleted
+                    QuantitySold = statistic.QuantitySold
                 });
 
-                return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Top selling products retrieved successfully.");
+                return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Top selling products retrieved successfully.", true);
             }
             catch (Exception ex)
             {

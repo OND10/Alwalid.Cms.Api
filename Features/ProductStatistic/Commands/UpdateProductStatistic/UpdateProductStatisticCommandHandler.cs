@@ -61,7 +61,7 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Commands.UpdateProductStatis
                     //IsDeleted = updatedStatistic.IsDeleted
                 };
 
-                return await Result<ProductStatisticResponseDto>.SuccessAsync(responseDto, "Product statistic updated successfully.");
+                return await Result<ProductStatisticResponseDto>.SuccessAsync(responseDto, "Product statistic updated successfully.", true);
             }
             catch (Exception ex)
             {

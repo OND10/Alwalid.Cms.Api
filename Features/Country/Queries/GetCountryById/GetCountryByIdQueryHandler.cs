@@ -6,7 +6,7 @@ using Alwalid.Cms.Api.Features.Country.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Country.Queries.GetCountryById
 {
-    public class GetCountryByIdQueryHandler : IQueryHandler<GetCountryByIdQuery, CountryResponseDto?>
+    public class GetCountryByIdQueryHandler : IQueryHandler<GetCountryByIdQuery, CountryResponseDto>
     {
         private readonly ICountryRepository _countryRepository;
 
@@ -15,7 +15,7 @@ namespace Alwalid.Cms.Api.Features.Country.Queries.GetCountryById
             _countryRepository = countryRepository;
         }
 
-        public async Task<Result<CountryResponseDto?>> Handle(GetCountryByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<CountryResponseDto>> Handle(GetCountryByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Country.Queries.GetCountryById
                 
                 if (country == null)
                 {
-                    return await Result<CountryResponseDto?>.FaildAsync(false, "Country not found.");
+                    return await Result<CountryResponseDto>.FaildAsync(false, "Country not found.");
                 }
 
                 var responseDto = new CountryResponseDto
@@ -34,11 +34,11 @@ namespace Alwalid.Cms.Api.Features.Country.Queries.GetCountryById
                     BranchesCount = country.Branches?.Count ?? 0
                 };
 
-                return await Result<CountryResponseDto?>.SuccessAsync(responseDto, "Country retrieved successfully.", true);
+                return await Result<CountryResponseDto>.SuccessAsync(responseDto, "Country retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<CountryResponseDto?>.FaildAsync(false, $"Error retrieving country: {ex.Message}");
+                return await Result<CountryResponseDto>.FaildAsync(false, $"Error retrieving country: {ex.Message}");
             }
         }
     }

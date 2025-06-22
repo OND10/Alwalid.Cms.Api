@@ -28,7 +28,7 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Commands.DeleteProductImage
 
                 if (isDeleted)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Product image deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Product image deleted successfully.", true);
                 }
                 else
                 {

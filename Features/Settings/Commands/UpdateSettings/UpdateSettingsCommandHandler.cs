@@ -44,7 +44,7 @@ namespace Alwalid.Cms.Api.Features.Settings.Commands.UpdateSettings
                     //IsDeleted = updatedSettings.IsDeleted
                 };
 
-                return await Result<SettingsResponseDto>.SuccessAsync(responseDto, "Settings updated successfully.");
+                return await Result<SettingsResponseDto>.SuccessAsync(responseDto, "Settings updated successfully.", true);
             }
             catch (Exception ex)
             {

@@ -28,7 +28,7 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Commands.DeleteProductStatis
 
                 if (isDeleted)
                 {
-                    return await Result<bool>.SuccessAsync(true, "Product statistic deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Product statistic deleted successfully.", true);
                 }
                 else
                 {

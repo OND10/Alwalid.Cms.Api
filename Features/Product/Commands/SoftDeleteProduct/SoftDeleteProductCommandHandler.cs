@@ -35,7 +35,7 @@ namespace Alwalid.Cms.Api.Features.Product.Commands.SoftDeleteProduct
                     _memoryCache.Remove("GetAllProducts");
                     _memoryCache.Remove("GetActiveProducts");
 
-                    return await Result<bool>.SuccessAsync(true, "Product soft deleted successfully.");
+                    return await Result<bool>.SuccessAsync(true, "Product soft deleted successfully.", true);
                 }
                 else
                 {

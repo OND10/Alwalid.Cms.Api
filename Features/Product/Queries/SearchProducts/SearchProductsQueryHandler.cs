@@ -43,7 +43,7 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.SearchProducts
                     IsDeleted = product.IsDeleted
                 });
 
-                return await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDtos, "Products search completed successfully.");
+                return await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDtos, "Products search completed successfully.", true);
             }
             catch (Exception ex)
             {

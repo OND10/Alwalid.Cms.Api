@@ -27,9 +27,18 @@ namespace Alwalid.Cms.Api.Features.Settings
 
         public async Task<Entities.Settings> CreateAsync(Entities.Settings settings)
         {
-            await _context.Settings.AddAsync(settings);
-            await _context.SaveChangesAsync();
-            return settings;
+
+            try
+            {
+                await _context.Settings.AddAsync(settings);
+                await _context.SaveChangesAsync();
+                return settings;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception($"{ex.Message}");
+            }
         }
 
         public async Task<Entities.Settings> UpdateAsync(Entities.Settings settings)
@@ -128,4 +137,4 @@ namespace Alwalid.Cms.Api.Features.Settings
             return settings?.DefaultCurrencyCode;
         }
     }
-} 
+}

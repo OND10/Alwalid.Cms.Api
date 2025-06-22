@@ -4,6 +4,7 @@ using Alwalid.Cms.Api.Entities;
 using Alwalid.Cms.Api.Features.Settings;
 using Alwalid.Cms.Api.Features.Settings.Dtos;
 using Microsoft.Extensions.Caching.Memory;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Alwalid.Cms.Api.Features.Settings.Queries.GetAllSettings
 {
@@ -31,14 +32,25 @@ namespace Alwalid.Cms.Api.Features.Settings.Queries.GetAllSettings
                     {
                         Id = setting.Id,
                         DefaultLanguage = setting.DefaultLanguage,
-                        //DefaultCurrencyId = setting.DefaultCurrencyId,
-                        //MaintenanceMode = setting.MaintenanceMode,
-                        //CreatedAt = setting.CreatedAt,
-                        //LastModifiedAt = setting.LastModifiedAt,
-                        //IsDeleted = setting.IsDeleted
+                        DefaultCurrencyCode = setting.DefaultCurrencyCode,
+                        IsMaintenanceMode = setting.IsMaintenanceMode,
+                        Address = setting.Address,
+                        Copyright = setting.Copyright,
+                        Facebook = setting.Facebook,
+                        FaviconUrl = setting.FaviconUrl,
+                        Instagram = setting.Instagram,
+                        LinkedIn = setting.LinkedIn,
+                        LogoUrl = setting.LogoUrl,
+                        SiteSubtitle = setting.SiteSubtitle,
+                        SiteTitle = setting.SiteTitle,
+                        Phone = setting.Phone,
+                        Twitter = setting.Twitter,
+                        Youtube = setting.Youtube,
+                        SupportEmail = setting.SupportEmail,
+                        Tiktok = setting.Tiktok,
                     });
 
-                    settings = await Result<IEnumerable<SettingsResponseDto>>.SuccessAsync(responseDtos, "Settings retrieved successfully.");
+                    settings = await Result<IEnumerable<SettingsResponseDto>>.SuccessAsync(responseDtos, "Settings retrieved successfully.", true);
 
                     if (settings.Data.Count() > 0)
                     {

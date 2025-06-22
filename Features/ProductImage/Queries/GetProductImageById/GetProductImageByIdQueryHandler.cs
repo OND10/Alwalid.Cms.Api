@@ -6,7 +6,7 @@ using Alwalid.Cms.Api.Features.ProductImage.Dtos;
 
 namespace Alwalid.Cms.Api.Features.ProductImage.Queries.GetProductImageById
 {
-    public class GetProductImageByIdQueryHandler : IQueryHandler<GetProductImageByIdQuery, ProductImageResponseDto?>
+    public class GetProductImageByIdQueryHandler : IQueryHandler<GetProductImageByIdQuery, ProductImageResponseDto>
     {
         private readonly IProductImageRepository _productImageRepository;
 
@@ -15,7 +15,7 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Queries.GetProductImageById
             _productImageRepository = productImageRepository;
         }
 
-        public async Task<Result<ProductImageResponseDto?>> Handle(GetProductImageByIdQuery query, CancellationToken cancellationToken)
+        public async Task<Result<ProductImageResponseDto>> Handle(GetProductImageByIdQuery query, CancellationToken cancellationToken)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Queries.GetProductImageById
                 
                 if (image == null)
                 {
-                    return await Result<ProductImageResponseDto?>.FaildAsync(false, "Product image not found.");
+                    return await Result<ProductImageResponseDto>.FaildAsync(false, "Product image not found.");
                 }
 
                 var responseDto = new ProductImageResponseDto
@@ -37,11 +37,11 @@ namespace Alwalid.Cms.Api.Features.ProductImage.Queries.GetProductImageById
                     //IsDeleted = image.IsDeleted
                 };
 
-                return await Result<ProductImageResponseDto?>.SuccessAsync(responseDto, "Product image retrieved successfully.");
+                return await Result<ProductImageResponseDto>.SuccessAsync(responseDto, "Product image retrieved successfully.", true);
             }
             catch (Exception ex)
             {
-                return await Result<ProductImageResponseDto?>.FaildAsync(false, $"Error retrieving product image: {ex.Message}");
+                return await Result<ProductImageResponseDto>.FaildAsync(false, $"Error retrieving product image: {ex.Message}");
             }
         }
     }
