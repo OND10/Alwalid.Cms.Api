@@ -43,6 +43,8 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Commands.UpdateProductStatis
                 //existingStatistic.Sales = command.Request.Sales;
                 //existingStatistic.Revenue = command.Request.Revenue;
                 existingStatistic.Date = command.Request.Date;
+                existingStatistic.QuantitySold = command.Request.QuantitySold;
+                existingStatistic.ViewedCounts = command.Request.ViewedCounts;
 
                 var updatedStatistic = await _productStatisticRepository.UpdateAsync(existingStatistic);
 
@@ -59,6 +61,8 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Commands.UpdateProductStatis
                     //CreatedAt = updatedStatistic.CreatedAt,
                     //LastModifiedAt = updatedStatistic.LastModifiedAt,
                     //IsDeleted = updatedStatistic.IsDeleted
+                    QuantitySold = updatedStatistic.QuantitySold,
+                    ViewedCounts = updatedStatistic.ViewedCounts
                 };
 
                 return await Result<ProductStatisticResponseDto>.SuccessAsync(responseDto, "Product statistic updated successfully.", true);

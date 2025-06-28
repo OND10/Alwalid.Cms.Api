@@ -39,7 +39,8 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetAllProductStatist
                         //CreatedAt = statistic.CreatedAt,
                         //LastModifiedAt = statistic.LastModifiedAt,
                         //IsDeleted = statistic.IsDeleted
-                        QuantitySold = statistic.QuantitySold
+                        QuantitySold = statistic.QuantitySold,
+                        ViewedCounts = statistic.ViewedCounts
                     });
 
                     statistics = await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Product statistics retrieved successfully.", true);

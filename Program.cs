@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders;
 using Alwalid.Cms.Api.Settings;
+using Alwalid.Cms.Api.Middleware;
+using ProductAPI.VSA.Features.Gemini.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -52,6 +54,8 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+new GenerateContentEndpoint().MapEndpoint(app);
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -60,6 +64,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<RateLimitingMiddleware>();
 
 app.UseCors("ProductionPolicy");
 

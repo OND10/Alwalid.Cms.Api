@@ -61,6 +61,13 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic
                 .ToListAsync();
         }
 
+        public async Task<Entities.ProductStatistic?> GetByProductAndDateAsync(int productId, DateTime date)
+        {
+            return await _context.ProductStatistics
+                .Include(ps => ps.Product)
+                .FirstOrDefaultAsync(ps => ps.ProductId == productId && ps.Date.Date == date.Date);
+        }
+
         public async Task<IEnumerable<Entities.ProductStatistic>> GetByDateRangeAsync(DateTime startDate, DateTime endDate)
         {
             return await _context.ProductStatistics
@@ -138,6 +145,16 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic
             return await _context.ProductStatistics.AnyAsync(ps => 
                 ps.ProductId == productId && 
                 ps.Date.Date == date.Date);
+        }
+
+        public async Task<IEnumerable<Entities.ProductStatistic>> GetMostViewedProductsAsync(int count, DateTime startDate, DateTime endDate)
+        {
+            return await _context.ProductStatistics
+                .Include(ps => ps.Product)
+                .Where(ps => ps.Date >= startDate && ps.Date <= endDate)
+                .OrderByDescending(ps => ps.ViewedCounts)
+                .Take(count)
+                .ToListAsync();
         }
     }
 } 

@@ -27,7 +27,8 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByProductId
                     ProductId = statistic.ProductId,
                     ProductName = statistic.Product?.EnglishName ?? string.Empty,
                     Date = statistic.Date,
-                    QuantitySold = statistic.QuantitySold
+                    QuantitySold = statistic.QuantitySold,
+                    ViewedCounts = statistic.ViewedCounts
                 });
 
                 return await Result<IEnumerable<ProductStatisticResponseDto>>.SuccessAsync(responseDtos, "Product statistics retrieved successfully.", true);
@@ -38,4 +39,4 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByProductId
             }
         }
     }
-} 
+}

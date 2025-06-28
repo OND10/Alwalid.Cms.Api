@@ -13,12 +13,14 @@ namespace Alwalid.Cms.Api.Features.ProductStatistic
         
         // ProductStatistic-specific operations
         Task<IEnumerable<Entities.ProductStatistic>> GetByProductIdAsync(int productId);
+        Task<Entities.ProductStatistic?> GetByProductAndDateAsync(int productId, DateTime date);
         Task<IEnumerable<Entities.ProductStatistic>> GetByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<Entities.ProductStatistic>> GetByProductAndDateRangeAsync(int productId, DateTime startDate, DateTime endDate);
         Task<int> GetTotalQuantitySoldByProductAsync(int productId);
         Task<int> GetTotalQuantitySoldByDateRangeAsync(DateTime startDate, DateTime endDate);
         Task<Entities.ProductStatistic?> GetTopSellingProductAsync(DateTime startDate, DateTime endDate);
         Task<IEnumerable<Entities.ProductStatistic>> GetTopSellingProductsAsync(int count, DateTime startDate, DateTime endDate);
+        Task<IEnumerable<Entities.ProductStatistic>> GetMostViewedProductsAsync(int count, DateTime startDate, DateTime endDate);
         Task<int> GetTotalCountAsync();
         Task<int> GetCountByProductAsync(int productId);
         Task<bool> ExistsAsync(int id);

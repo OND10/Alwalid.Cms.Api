@@ -4,11 +4,13 @@ using Microsoft.AspNetCore.OData.Routing.Controllers;
 using Alwalid.Cms.Api.Features.ProductStatistic.Commands.AddProductStatistic;
 using Alwalid.Cms.Api.Features.ProductStatistic.Commands.UpdateProductStatistic;
 using Alwalid.Cms.Api.Features.ProductStatistic.Commands.DeleteProductStatistic;
+using Alwalid.Cms.Api.Features.ProductStatistic.Commands.IncrementViewCount;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetAllProductStatistics;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetProductStatisticById;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByProductId;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByDateRange;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetTopSellingProducts;
+using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetMostViewedProducts;
 using Alwalid.Cms.Api.Abstractions.Messaging;
 using Alwalid.Cms.Api.Features.ProductStatistic.Dtos;
 using Alwalid.Cms.Api.Common.Handler;
@@ -22,30 +24,36 @@ namespace Alwalid.Cms.Api.Features.Controllers
         private readonly ICommandHandler<AddProductStatisticCommand, ProductStatisticResponseDto> _addProductStatisticHandler;
         private readonly ICommandHandler<UpdateProductStatisticCommand, ProductStatisticResponseDto> _updateProductStatisticHandler;
         private readonly ICommandHandler<DeleteProductStatisticCommand, bool> _deleteProductStatisticHandler;
+        private readonly ICommandHandler<IncrementViewCountCommand, ProductStatisticResponseDto> _incrementViewCountHandler;
         private readonly IQueryHandler<GetAllProductStatisticsQuery, IEnumerable<ProductStatisticResponseDto>> _getAllProductStatisticsHandler;
         private readonly IQueryHandler<GetProductStatisticByIdQuery, ProductStatisticResponseDto> _getProductStatisticByIdHandler;
         private readonly IQueryHandler<GetByProductIdForStatisticQuery, IEnumerable<ProductStatisticResponseDto>> _getByProductIdHandler;
         private readonly IQueryHandler<GetByDateRangeQuery, IEnumerable<ProductStatisticResponseDto>> _getByDateRangeHandler;
         private readonly IQueryHandler<GetTopSellingProductsQuery, IEnumerable<ProductStatisticResponseDto>> _getTopSellingProductsHandler;
+        private readonly IQueryHandler<GetMostViewedProductsQuery, IEnumerable<ProductStatisticResponseDto>> _getMostViewedProductsHandler;
 
         public ProductStatisticController(
             ICommandHandler<AddProductStatisticCommand, ProductStatisticResponseDto> addProductStatisticHandler,
             ICommandHandler<UpdateProductStatisticCommand, ProductStatisticResponseDto> updateProductStatisticHandler,
             ICommandHandler<DeleteProductStatisticCommand, bool> deleteProductStatisticHandler,
+            ICommandHandler<IncrementViewCountCommand, ProductStatisticResponseDto> incrementViewCountHandler,
             IQueryHandler<GetAllProductStatisticsQuery, IEnumerable<ProductStatisticResponseDto>> getAllProductStatisticsHandler,
             IQueryHandler<GetProductStatisticByIdQuery, ProductStatisticResponseDto> getProductStatisticByIdHandler,
             IQueryHandler<GetByProductIdForStatisticQuery, IEnumerable<ProductStatisticResponseDto>> getByProductIdHandler,
             IQueryHandler<GetByDateRangeQuery, IEnumerable<ProductStatisticResponseDto>> getByDateRangeHandler,
-            IQueryHandler<GetTopSellingProductsQuery, IEnumerable<ProductStatisticResponseDto>> getTopSellingProductsHandler)
+            IQueryHandler<GetTopSellingProductsQuery, IEnumerable<ProductStatisticResponseDto>> getTopSellingProductsHandler,
+            IQueryHandler<GetMostViewedProductsQuery, IEnumerable<ProductStatisticResponseDto>> getMostViewedProductsHandler)
         {
             _addProductStatisticHandler = addProductStatisticHandler;
             _updateProductStatisticHandler = updateProductStatisticHandler;
             _deleteProductStatisticHandler = deleteProductStatisticHandler;
+            _incrementViewCountHandler = incrementViewCountHandler;
             _getAllProductStatisticsHandler = getAllProductStatisticsHandler;
             _getProductStatisticByIdHandler = getProductStatisticByIdHandler;
             _getByProductIdHandler = getByProductIdHandler;
             _getByDateRangeHandler = getByDateRangeHandler;
             _getTopSellingProductsHandler = getTopSellingProductsHandler;
+            _getMostViewedProductsHandler = getMostViewedProductsHandler;
         }
 
         [HttpPost]
@@ -164,6 +172,37 @@ namespace Alwalid.Cms.Api.Features.Controllers
                 Request = request
             };
             var result = await _getTopSellingProductsHandler.Handle(query, cancellationToken);
+
+            if (result.IsSuccess)
+                return Ok(result.Data.AsQueryable());
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpPost("increment-view-count")]
+        public async Task<IActionResult> IncrementViewCount([FromBody] int productId, CancellationToken cancellationToken)
+        {
+            var command = new IncrementViewCountCommand
+            {
+                ProductId = productId
+            };
+            var result = await _incrementViewCountHandler.Handle(command, cancellationToken);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(result.Message);
+        }
+
+        [HttpGet("most-viewed")]
+        [EnableQuery]
+        public async Task<IActionResult> GetMostViewedProducts([FromQuery] MostViewedProductDto request, CancellationToken cancellationToken)
+        {
+            var query = new GetMostViewedProductsQuery
+            {
+                Request = request
+            };
+            var result = await _getMostViewedProductsHandler.Handle(query, cancellationToken);
 
             if (result.IsSuccess)
                 return Ok(result.Data.AsQueryable());

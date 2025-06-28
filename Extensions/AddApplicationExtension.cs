@@ -72,12 +72,14 @@ using Alwalid.Cms.Api.Features.ProductStatistic;
 using Alwalid.Cms.Api.Features.ProductStatistic.Commands.AddProductStatistic;
 using Alwalid.Cms.Api.Features.ProductStatistic.Commands.DeleteProductStatistic;
 using Alwalid.Cms.Api.Features.ProductStatistic.Commands.UpdateProductStatistic;
+using Alwalid.Cms.Api.Features.ProductStatistic.Commands.IncrementViewCount;
 using Alwalid.Cms.Api.Features.ProductStatistic.Dtos;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetAllProductStatistics;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByDateRange;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetByProductId;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetProductStatisticById;
 using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetTopSellingProducts;
+using Alwalid.Cms.Api.Features.ProductStatistic.Queries.GetMostViewedProducts;
 using Alwalid.Cms.Api.Features.Settings;
 using Alwalid.Cms.Api.Features.Settings.Commands.AddSettings;
 using Alwalid.Cms.Api.Features.Settings.Commands.DeleteSettings;
@@ -90,6 +92,18 @@ using Alwalid.Cms.Api.Features.Settings.Queries.GetAllSettings;
 using Alwalid.Cms.Api.Features.Settings.Queries.GetMainSettings;
 using Alwalid.Cms.Api.Features.Settings.Queries.GetSettingsById;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Alwalid.Cms.Api.Features.Feedback;
+using Alwalid.Cms.Api.Features.Feedback.Commands.AddFeedback;
+using Alwalid.Cms.Api.Features.Feedback.Commands.UpdateFeedback;
+using Alwalid.Cms.Api.Features.Feedback.Commands.DeleteFeedback;
+using Alwalid.Cms.Api.Features.Feedback.Dtos;
+using Alwalid.Cms.Api.Features.Feedback.Queries.GetAllFeedbacks;
+using Alwalid.Cms.Api.Features.Feedback.Queries.GetFeedbackById;
+using Alwalid.Cms.Api.Features.Feedback.Queries.GetActiveFeedbacks;
+using Alwalid.Cms.Api.Features.Feedback.Queries.GetByRating;
+using Alwalid.Cms.Api.Features.Feedback.Queries.GetByPosition;
+using Alwalid.Cms.Api.Features.Feedback.Queries.GetFeedbackStats;
+using Alwalid.Cms.Api.Features.Gemini.Commands.GenerateContent;
 
 namespace Alwalid.Cms.Api.Extensions
 {
@@ -97,6 +111,10 @@ namespace Alwalid.Cms.Api.Extensions
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
+
+
+            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
             // Register repositories
             services.AddScoped<ICountryRepository, CountryRepository>();
             services.AddScoped<IBranchRepository, BranchRepository>();
@@ -108,6 +126,7 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICurrencyRepository, CurrencyRepository>();
             services.AddScoped<ISettingsRepository, SettingsRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IFeedbackRepository, FeedbackRepository>();
 
             // Register Country handlers
             services.AddScoped<ICommandHandler<AddCountryCommand, CountryResponseDto>, AddCountryCommandHandler>();
@@ -164,11 +183,24 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<ICommandHandler<AddProductStatisticCommand, ProductStatisticResponseDto>, AddProductStatisticCommandHandler>();
             services.AddScoped<ICommandHandler<UpdateProductStatisticCommand, ProductStatisticResponseDto>, UpdateProductStatisticCommandHandler>();
             services.AddScoped<ICommandHandler<DeleteProductStatisticCommand, bool>, DeleteProductStatisticCommandHandler>();
+            services.AddScoped<ICommandHandler<IncrementViewCountCommand, ProductStatisticResponseDto>, IncrementViewCountCommandHandler>();
             services.AddScoped<IQueryHandler<GetAllProductStatisticsQuery, IEnumerable<ProductStatisticResponseDto>>, GetAllProductStatisticsQueryHandler>();
             services.AddScoped<IQueryHandler<GetProductStatisticByIdQuery, ProductStatisticResponseDto>, GetProductStatisticByIdQueryHandler>();
             services.AddScoped<IQueryHandler<GetByProductIdForStatisticQuery, IEnumerable<ProductStatisticResponseDto>>, GetByProductIdForStatisticQueryHandler>();
             services.AddScoped<IQueryHandler<GetByDateRangeQuery, IEnumerable<ProductStatisticResponseDto>>, GetByDateRangeQueryHandler>();
             services.AddScoped<IQueryHandler<GetTopSellingProductsQuery, IEnumerable<ProductStatisticResponseDto>>, GetTopSellingProductsQueryHandler>();
+            services.AddScoped<IQueryHandler<GetMostViewedProductsQuery, IEnumerable<ProductStatisticResponseDto>>, GetMostViewedProductsQueryHandler>();
+
+            // Register Feedback handlers
+            services.AddScoped<ICommandHandler<AddFeedbackCommand, FeedbackResponseDto>, AddFeedbackCommandHandler>();
+            services.AddScoped<ICommandHandler<UpdateFeedbackCommand, FeedbackResponseDto>, UpdateFeedbackCommandHandler>();
+            services.AddScoped<ICommandHandler<DeleteFeedbackCommand, bool>, DeleteFeedbackCommandHandler>();
+            services.AddScoped<IQueryHandler<GetAllFeedbacksQuery, IEnumerable<FeedbackResponseDto>>, GetAllFeedbacksQueryHandler>();
+            services.AddScoped<IQueryHandler<GetFeedbackByIdQuery, FeedbackResponseDto>, GetFeedbackByIdQueryHandler>();
+            services.AddScoped<IQueryHandler<GetActiveFeedbacksQuery, IEnumerable<FeedbackResponseDto>>, GetActiveFeedbacksQueryHandler>();
+            services.AddScoped<IQueryHandler<GetByRatingQuery, IEnumerable<FeedbackResponseDto>>, GetByRatingQueryHandler>();
+            services.AddScoped<IQueryHandler<GetByPositionQuery, IEnumerable<FeedbackResponseDto>>, GetByPositionQueryHandler>();
+            services.AddScoped<IQueryHandler<GetFeedbackStatsQuery, FeedbackStatsDto>, GetFeedbackStatsQueryHandler>();
 
             // Register Currency handlers
             services.AddScoped<ICommandHandler<AddCurrencyCommand, CurrencyResponseDto>, AddCurrencyCommandHandler>();
@@ -192,6 +224,10 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<IQueryHandler<GetAllSettingsQuery, IEnumerable<SettingsResponseDto>>, GetAllSettingsQueryHandler>();
             services.AddScoped<IQueryHandler<GetSettingsByIdQuery, SettingsResponseDto?>, GetSettingsByIdQueryHandler>();
             services.AddScoped<IQueryHandler<GetMainSettingsQuery, SettingsResponseDto?>, GetMainSettingsQueryHandler>();
+
+
+            services.AddHttpClient<GenerateContentCommandHandler>();
+            services.AddScoped<ICommandHandler<GenerateContentCommand, string>, GenerateContentCommandHandler>();
 
 
             //Registering External Services
