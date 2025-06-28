@@ -11,6 +11,7 @@ namespace Alwalid.Cms.Api.Data.Configurations
             entity.HasKey(e => e.Id);
             entity.Property(e => e.QuantitySold).IsRequired();
             entity.Property(e => e.Date).IsRequired();
+            entity.Property(e => e.ViewedCounts).HasDefaultValue(0);
         }
     }
 }

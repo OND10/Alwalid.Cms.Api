@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.OData;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders;
+using Alwalid.Cms.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,9 @@ builder.Services.AddControllers().AddOData(opt =>
     opt.Select().Filter().OrderBy();
 }).AddNewtonsoftJson(x=>x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+
+// Register the GemeinSettings to ease IOtions design pattern
+builder.Services.Configure<GeminiSettings>(builder.Configuration.GetSection(nameof(GeminiSettings)));
 
 // Add CORS
 builder.Services.AddCors(options =>

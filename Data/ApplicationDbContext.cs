@@ -19,7 +19,11 @@ namespace Alwalid.Cms.Api.Data
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductStatistic> ProductStatistics { get; set; }
         public DbSet<Currency> Currencies { get; set; }
-        public DbSet<Settings> Settings { get; set; }
+        public DbSet<Entities.Settings> Settings { get; set; }
+        public DbSet<About> Abouts { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

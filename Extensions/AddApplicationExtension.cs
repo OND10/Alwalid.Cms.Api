@@ -3,6 +3,7 @@ using Alwalid.Cms.Api.Common.Handler;
 using Alwalid.Cms.Api.Common.Helper.Implementation;
 using Alwalid.Cms.Api.Common.Helper.Interface;
 using Alwalid.Cms.Api.Data;
+using Alwalid.Cms.Api.Email;
 using Alwalid.Cms.Api.Entities;
 using Alwalid.Cms.Api.Features.Branch;
 using Alwalid.Cms.Api.Features.Branch.Commands.AddBranch;
@@ -88,6 +89,7 @@ using Alwalid.Cms.Api.Features.Settings.Dtos;
 using Alwalid.Cms.Api.Features.Settings.Queries.GetAllSettings;
 using Alwalid.Cms.Api.Features.Settings.Queries.GetMainSettings;
 using Alwalid.Cms.Api.Features.Settings.Queries.GetSettingsById;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 namespace Alwalid.Cms.Api.Extensions
 {
@@ -191,7 +193,10 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddScoped<IQueryHandler<GetSettingsByIdQuery, SettingsResponseDto?>, GetSettingsByIdQueryHandler>();
             services.AddScoped<IQueryHandler<GetMainSettingsQuery, SettingsResponseDto?>, GetMainSettingsQueryHandler>();
 
+
+            //Registering External Services
+            services.AddTransient<IEmailSender, EmailSender>();
             return services;
         }
     }
-} 
+}

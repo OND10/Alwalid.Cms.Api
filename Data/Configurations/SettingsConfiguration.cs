@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Alwalid.Cms.Api.Data.Configurations
 {
-    public class SettingsConfiguration : IEntityTypeConfiguration<Settings>
+    public class SettingsConfiguration : IEntityTypeConfiguration<Entities.Settings>
     {
-        public void Configure(EntityTypeBuilder<Settings> entity)
+        public void Configure(EntityTypeBuilder<Entities.Settings> entity)
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.SiteTitle).HasMaxLength(200);
