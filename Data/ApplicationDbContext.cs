@@ -23,6 +23,8 @@ namespace Alwalid.Cms.Api.Data
         public DbSet<About> Abouts { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<Partners> Partners { get; set; }
+        public DbSet<Services> Services { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

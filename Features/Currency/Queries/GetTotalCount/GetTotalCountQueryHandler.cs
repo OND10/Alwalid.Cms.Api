@@ -19,7 +19,7 @@ namespace Alwalid.Cms.Api.Features.Currency.Queries.GetTotalCount
             {
                 var count = await _currencyRepository.GetTotalCountAsync();
 
-                return await Result<int>.SuccessAsync(count, "Total currency count retrieved successfully.");
+                return await Result<int>.SuccessAsync(count, "Total currency count retrieved successfully.", true);
             }
             catch (Exception ex)
             {

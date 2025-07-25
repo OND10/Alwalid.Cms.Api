@@ -27,6 +27,8 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetAllProducts
                 {
                     var result = await _productRepository.GetAllAsync();
 
+                    
+
                     var responseDtos = result.Select(product => new ProductResponseDto
                     {
                         Id = product.Id,
@@ -46,7 +48,8 @@ namespace Alwalid.Cms.Api.Features.Product.Queries.GetAllProducts
                         StatisticsCount = product.Statistics?.Count ?? 0,
                         CreatedAt = product.CreatedAt,
                         LastModifiedAt = product.LastModifiedAt,
-                        IsDeleted = product.IsDeleted
+                        IsDeleted = product.IsDeleted,
+                        ImageUrls = product.Images!.Select(i=>i.ImageUrl).ToList(),
                     });
 
                     products = await Result<IEnumerable<ProductResponseDto>>.SuccessAsync(responseDtos, "Products retrieved successfully.", true);

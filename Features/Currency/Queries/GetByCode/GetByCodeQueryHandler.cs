@@ -40,7 +40,7 @@ namespace Alwalid.Cms.Api.Features.Currency.Queries.GetByCode
                     //IsDeleted = currency.IsDeleted
                 };
 
-                return await Result<CurrencyResponseDto>.SuccessAsync(responseDto, "Currency retrieved successfully.");
+                return await Result<CurrencyResponseDto>.SuccessAsync(responseDto, "Currency retrieved successfully.", true);
             }
             catch (Exception ex)
             {

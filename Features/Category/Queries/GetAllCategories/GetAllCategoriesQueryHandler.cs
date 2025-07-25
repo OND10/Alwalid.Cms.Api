@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetAllCategories
         {
             try
             {
-                if (!_memoryCache.TryGetValue(CacheKey, out Result<IEnumerable<CategoryResponseDto>>? categories))
+                if (!_memoryCache.TryGetValue(CacheKey, out Result<IEnumerable<CategoryResponseDto>> categories))
                 {
                     var result = await _categoryRepository.GetAllAsync();
 
@@ -40,7 +40,7 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetAllCategories
                         IsDeleted = category.IsDeleted
                     });
 
-                    categories = await Result<IEnumerable<CategoryResponseDto>>.SuccessAsync(responseDtos, "Categories retrieved successfully.");
+                    categories = await Result<IEnumerable<CategoryResponseDto>>.SuccessAsync(responseDtos, "Categories retrieved successfully.", true);
 
                     if (categories.Data.Count() > 0)
                     {
@@ -57,7 +57,7 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetAllCategories
                     }
                 }
 
-                return categories ?? await Result<IEnumerable<CategoryResponseDto>>.FaildAsync(false, "No categories found.");
+                return await Result<IEnumerable<CategoryResponseDto>>.SuccessAsync(categories.Data, "Categories retrieved successfully", true);
             }
             catch (Exception ex)
             {

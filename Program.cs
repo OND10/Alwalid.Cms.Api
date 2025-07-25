@@ -26,7 +26,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("ProductionPolicy", policy =>
     {
         policy.WithOrigins(
-          "http://localhost:4200/"
+          "http://localhost:5173"
         )
         .WithMethods("GET", "POST", "PUT", "DELETE")
         .WithHeaders("Content-Type")

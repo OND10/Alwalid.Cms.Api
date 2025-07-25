@@ -20,5 +20,6 @@ namespace Alwalid.Cms.Api.Features.Product.Dtos
         public DateTime CreatedAt { get; set; }
         public DateTime? LastModifiedAt { get; set; }
         public bool IsDeleted { get; set; }
+        public List<string> ImageUrls = new List<string>();  
     }
 } 
