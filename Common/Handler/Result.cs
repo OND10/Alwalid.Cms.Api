@@ -11,6 +11,10 @@
         public static Task<Result<T>> SuccessAsync(T model, string message, bool success)
         {
             return Task.FromResult<Result<T>>(new Result<T> { Data = model, IsSuccess = success, Message = message });
+        }   
+        public static Task<Result<T>> SuccessAsync(T model)
+        {
+            return Task.FromResult<Result<T>>(new Result<T> { Data = model });
         }
 
         public static Task<Result<T>> SuccessAsync(string message, bool success)

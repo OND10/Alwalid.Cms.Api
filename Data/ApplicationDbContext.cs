@@ -1,13 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Alwalid.Cms.Api.Entities;
 using Alwalid.Cms.Api.Shared;
+using Alwalid.Cms.Api.Events;
 
 namespace Alwalid.Cms.Api.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        private readonly IEventPublisher _publisher;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IEventPublisher publisher) : base(options)
         {
+            _publisher = publisher;
+
         }
 
         // DbSet properties
@@ -24,7 +29,8 @@ namespace Alwalid.Cms.Api.Data
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<Partners> Partners { get; set; }
-        public DbSet<Services> Services { get; set; }
+        public DbSet<Entities.Services> Services { get; set; }
+        public DbSet<User> Users { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -57,6 +63,32 @@ namespace Alwalid.Cms.Api.Data
             }
 
             return base.SaveChangesAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Saves changes then publishes all domain events collected on tracked entities.
+        /// </summary>
+        public async Task<int> SaveChangesWithEventsAsync(CancellationToken ct = default)
+        {
+            var domainEvents = ChangeTracker
+                .Entries<BaseEntity>()
+                .Select(e => e.Entity)
+                .SelectMany(e => e.DomainEvents)
+                .ToList();
+
+            var result = await base.SaveChangesAsync(ct);
+
+            if (domainEvents.Count > 0)
+            {
+                await _publisher.PublishAsync(domainEvents, ct);
+
+                foreach (var entityEntry in ChangeTracker.Entries<BaseEntity>())
+                {
+                    entityEntry.Entity.ClearDomainEvents();
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -3,8 +3,9 @@ using Alwalid.Cms.Api.Features.Category.Dtos;
 
 namespace Alwalid.Cms.Api.Features.Category.Queries.GetAllCategories
 {
-    public class GetAllCategoriesQuery : IQuery<IEnumerable<CategoryResponseDto>>
+    public class GetAllCategoriesQuery : ICacheableQuery<IEnumerable<CategoryResponseDto>>
     {
-        // No parameters needed for getting all categories
+        public string CacheKey => "GetAllCategories";
+        public TimeSpan? CacheDuration => TimeSpan.FromMinutes(10);
     }
 } 

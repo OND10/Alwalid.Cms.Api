@@ -35,9 +35,9 @@ namespace Alwalid.Cms.Api.Features.Category.Queries.GetAllCategories
                         DepartmentId = category.DepartmentId,
                         DepartmentName = category.Department?.EnglishName ?? string.Empty,
                         ProductsCount = category.Products?.Count ?? 0,
-                        CreatedAt = category.CreatedAt,
-                        LastModifiedAt = category.LastModifiedAt,
-                        IsDeleted = category.IsDeleted
+                        //CreatedAt = category.CreatedAt,
+                        //LastModifiedAt = category.LastModifiedAt,
+                        //IsDeleted = category.IsDeleted
                     });
 
                     categories = await Result<IEnumerable<CategoryResponseDto>>.SuccessAsync(responseDtos, "Categories retrieved successfully.", true);

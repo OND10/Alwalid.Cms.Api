@@ -7,6 +7,8 @@ using Microsoft.Extensions.FileProviders;
 using Alwalid.Cms.Api.Settings;
 using Alwalid.Cms.Api.Middleware;
 using ProductAPI.VSA.Features.Gemini.Endpoints;
+using System;
+using Alwalid.Cms.Api.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,6 +55,18 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    db.Users.AddRange(
+        new User { Email = "user1@absher.com", MarketName = "Absher", ReceiveCategoryNotifications = true },
+        new User { Email = "user2@absher.com", MarketName = "Absher", ReceiveCategoryNotifications = true },
+        new User { Email = "someone@other.com", MarketName = "OtherMarket", ReceiveCategoryNotifications = true }
+    );
+    await db.SaveChangesAsync();
+}
 
 new GenerateContentEndpoint().MapEndpoint(app);
 

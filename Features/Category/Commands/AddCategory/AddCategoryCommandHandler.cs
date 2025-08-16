@@ -29,12 +29,8 @@ namespace Alwalid.Cms.Api.Features.Category.Commands.AddCategory
                 }
 
                 // Create new category
-                var category = new Entities.Category
-                {
-                    EnglishName = command.Request.EnglishName,
-                    ArabicName = command.Request.ArabicName,
-                    DepartmentId = command.Request.DepartmentId
-                };
+                var category = new Entities.Category(command.Request.EnglishName, command.Request.ArabicName, command.Request.DepartmentId, command.Request.MarketName);
+
 
                 var createdCategory = await _categoryRepository.CreateAsync(category);
 

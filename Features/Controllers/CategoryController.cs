@@ -11,6 +11,7 @@ using Alwalid.Cms.Api.Features.Category.Queries.GetActiveCategories;
 using Alwalid.Cms.Api.Abstractions.Messaging;
 using Alwalid.Cms.Api.Common.Handler;
 using Alwalid.Cms.Api.Features.Category.Dtos;
+using Alwalid.Cms.Api.Abstractions;
 
 namespace Alwalid.Cms.Api.Features.Controllers
 {
@@ -18,6 +19,7 @@ namespace Alwalid.Cms.Api.Features.Controllers
     [Route("api/[controller]")]
     public class CategoryController : ODataController
     {
+        private readonly IDispatcher _dispatcher;
         private readonly ICommandHandler<AddCategoryCommand, CategoryResponseDto> _addCategoryHandler;
         private readonly ICommandHandler<UpdateCategoryCommand, CategoryResponseDto> _updateCategoryHandler;
         private readonly ICommandHandler<DeleteCategoryCommand, bool> _deleteCategoryHandler;
@@ -33,7 +35,8 @@ namespace Alwalid.Cms.Api.Features.Controllers
             ICommandHandler<SoftDeleteCategoryCommand, bool> softDeleteCategoryHandler,
             IQueryHandler<GetAllCategoriesQuery, IEnumerable<CategoryResponseDto>> getAllCategoriesHandler,
             IQueryHandler<GetCategoryByIdQuery, CategoryResponseDto> getCategoryByIdHandler,
-            IQueryHandler<GetActiveCategoriesQuery, IEnumerable<CategoryResponseDto>> getActiveCategoriesHandler)
+            IQueryHandler<GetActiveCategoriesQuery, IEnumerable<CategoryResponseDto>> getActiveCategoriesHandler,
+            IDispatcher dispatcher)
         {
             _addCategoryHandler = addCategoryHandler;
             _updateCategoryHandler = updateCategoryHandler;
@@ -42,6 +45,7 @@ namespace Alwalid.Cms.Api.Features.Controllers
             _getAllCategoriesHandler = getAllCategoriesHandler;
             _getCategoryByIdHandler = getCategoryByIdHandler;
             _getActiveCategoriesHandler = getActiveCategoriesHandler;
+            _dispatcher = dispatcher;
         }
 
         [HttpPost]
@@ -51,7 +55,8 @@ namespace Alwalid.Cms.Api.Features.Controllers
             {
                 Request = request,
             };
-            var  result= await _addCategoryHandler.Handle(command, cancellationToken);
+            //var  result= await _addCategoryHandler.Handle(command, cancellationToken);
+            var result = await _dispatcher.SendCommandAsync(command, cancellationToken);
 
             if (result.IsSuccess)
                 return Ok(result.Data);
@@ -107,7 +112,8 @@ namespace Alwalid.Cms.Api.Features.Controllers
         public async Task<IActionResult> GetAllCategories(CancellationToken cancellationToken)
         {
             var query = new GetAllCategoriesQuery();
-            var result = await _getAllCategoriesHandler.Handle(query, cancellationToken);
+            //var result = await _getAllCategoriesHandler.Handle(query, cancellationToken);
+            var result = await _dispatcher.SendQueryAsync(query, cancellationToken);
 
             if (result.IsSuccess)
                 return Ok(result.Data.AsQueryable());
@@ -122,8 +128,8 @@ namespace Alwalid.Cms.Api.Features.Controllers
             {
                 Id = id,
             };
-            var result = await _getCategoryByIdHandler.Handle(query, cancellationToken);
-
+            //var result = await _getCategoryByIdHandler.Handle(query, cancellationToken);
+            var result = await _dispatcher.SendQueryAsync(query, cancellationToken);
             if (result.IsSuccess)
                 return Ok(result.Data);
 

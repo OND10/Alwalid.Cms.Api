@@ -33,7 +33,7 @@ namespace Alwalid.Cms.Api.Features.Category
         public async Task<Entities.Category> CreateAsync(Entities.Category category)
         {
             await _context.Categories.AddAsync(category);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesWithEventsAsync();
             return category;
         }
 

@@ -104,6 +104,11 @@ using Alwalid.Cms.Api.Features.Feedback.Queries.GetByRating;
 using Alwalid.Cms.Api.Features.Feedback.Queries.GetByPosition;
 using Alwalid.Cms.Api.Features.Feedback.Queries.GetFeedbackStats;
 using Alwalid.Cms.Api.Features.Gemini.Commands.GenerateContent;
+using Alwalid.Cms.Api.Abstractions;
+using Alwalid.Cms.Api.Common;
+using Alwalid.Cms.Api.Services;
+using Alwalid.Cms.Api.Events;
+using Alwalid.Cms.Api.Features.Notification.Services;
 
 namespace Alwalid.Cms.Api.Extensions
 {
@@ -114,6 +119,12 @@ namespace Alwalid.Cms.Api.Extensions
 
 
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddSingleton<ICacheService, MemoryCacheService>();
+            services.AddScoped<IDispatcher, Dispatcher>();
+            services.AddSingleton<IEventPublisher, EventPublisher>();
+            services.AddScoped<INotificationService, ConsoleNotificationService>();
+
 
             // Register repositories
             services.AddScoped<ICountryRepository, CountryRepository>();
