@@ -20,10 +20,10 @@ namespace Alwalid.Cms.Api.Entities
 
         public Category(string EnglishName, string ArabicName, int DepartmentId, string MarketName)
         {
-            EnglishName = EnglishName;
-            ArabicName = ArabicName;
-            MarketName = MarketName;
-            DepartmentId = DepartmentId;
+            this.EnglishName = EnglishName;
+            this.ArabicName = ArabicName;
+            this.MarketName = MarketName;
+            this.DepartmentId = DepartmentId;
 
             // raise the domain event at creation time
             AddDomainEvent(new CategoryCreatedEvent(this));

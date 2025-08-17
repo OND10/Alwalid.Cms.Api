@@ -109,6 +109,8 @@ using Alwalid.Cms.Api.Common;
 using Alwalid.Cms.Api.Services;
 using Alwalid.Cms.Api.Events;
 using Alwalid.Cms.Api.Features.Notification.Services;
+using Alwalid.Cms.Api.Features.Category.Events;
+using Alwalid.Cms.Api.Features.Category.Handlers;
 
 namespace Alwalid.Cms.Api.Extensions
 {
@@ -123,6 +125,7 @@ namespace Alwalid.Cms.Api.Extensions
             services.AddSingleton<ICacheService, MemoryCacheService>();
             services.AddScoped<IDispatcher, Dispatcher>();
             services.AddSingleton<IEventPublisher, EventPublisher>();
+            services.AddScoped<IDomainEventHandler<CategoryCreatedEvent>, CategoryCreatedHandler>();
             services.AddScoped<INotificationService, ConsoleNotificationService>();
 
 
