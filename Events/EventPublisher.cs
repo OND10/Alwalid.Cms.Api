@@ -1,10 +1,13 @@
 ﻿using Alwalid.Cms.Api.Abstractions;
 using Alwalid.Cms.Api.Features.ProductImage.Queries.GetProductImageById;
+using Microsoft.OpenApi.Writers;
 
 namespace Alwalid.Cms.Api.Events
 {
     public class EventPublisher : IEventPublisher
     {
+
+        // root provider
         private readonly IServiceProvider _serviceProvider;
 
         // It works same as dispatcher
@@ -14,8 +17,11 @@ namespace Alwalid.Cms.Api.Events
         }
         public async Task PublishAsync(IDomainEvent domainEvent, CancellationToken cancellationToken = default)
         {
+            // Create DI scope so scoped services can be resolved
+            using var scope = _serviceProvider.CreateScope();
+
             var handlerInterface = typeof(IDomainEventHandler<>).MakeGenericType(domainEvent.GetType());
-            var handlers = _serviceProvider.GetServices(handlerInterface);
+            var handlers = scope.ServiceProvider.GetServices(handlerInterface);
 
             // Invoke each handler’s HandleAsync
             var handleMethod = handlerInterface.GetMethod("HandleAsync")!;
