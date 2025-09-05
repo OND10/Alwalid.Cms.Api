@@ -111,6 +111,8 @@ using Alwalid.Cms.Api.Events;
 using Alwalid.Cms.Api.Features.Notification.Services;
 using Alwalid.Cms.Api.Features.Category.Events;
 using Alwalid.Cms.Api.Features.Category.Handlers;
+using FluentValidation;
+using System;
 
 namespace Alwalid.Cms.Api.Extensions
 {
@@ -242,6 +244,12 @@ namespace Alwalid.Cms.Api.Extensions
 
             services.AddHttpClient<GenerateContentCommandHandler>();
             services.AddScoped<ICommandHandler<GenerateContentCommand, string>, GenerateContentCommandHandler>();
+
+
+            //Validators
+            services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestDtoValidator>();
+
+         
 
 
             //Registering External Services

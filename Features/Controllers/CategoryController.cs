@@ -83,7 +83,7 @@ namespace Alwalid.Cms.Api.Features.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategory(int id, CancellationToken cancellationToken)
         {
-            var command = new DeleteCategoryCommand{ Id = id};
+            var command = new DeleteCategoryCommand { Id = id };
             var result = await _deleteCategoryHandler.Handle(command, cancellationToken);
 
             if (result.IsSuccess)
@@ -97,7 +97,7 @@ namespace Alwalid.Cms.Api.Features.Controllers
         {
             var command = new SoftDeleteCategoryCommand
             {
-                Id= id,
+                Id = id,
             };
             var result = await _softDeleteCategoryHandler.Handle(command, cancellationToken);
 
@@ -133,7 +133,7 @@ namespace Alwalid.Cms.Api.Features.Controllers
             if (result.IsSuccess)
                 return Ok(result.Data);
 
-            return NotFound(result.Message);
+            throw new KeyNotFoundException($"{result.Message} with Id {id}");
         }
 
         [HttpGet("active")]

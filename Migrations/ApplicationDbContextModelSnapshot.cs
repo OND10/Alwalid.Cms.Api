@@ -84,7 +84,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Abouts");
+                    b.ToTable("Abouts", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Branch", b =>
@@ -112,7 +112,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Branches");
+                    b.ToTable("Branches", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Category", b =>
@@ -162,7 +162,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Contact", b =>
@@ -225,7 +225,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Contacts");
+                    b.ToTable("Contacts", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Country", b =>
@@ -248,7 +248,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Currency", b =>
@@ -276,7 +276,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Currencies");
+                    b.ToTable("Currencies", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Department", b =>
@@ -304,7 +304,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("Departments");
+                    b.ToTable("Departments", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Feedback", b =>
@@ -364,7 +364,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Feedbacks");
+                    b.ToTable("Feedbacks", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Partners", b =>
@@ -409,7 +409,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Partners");
+                    b.ToTable("Partners", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Product", b =>
@@ -481,7 +481,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.ProductImage", b =>
@@ -504,7 +504,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.ProductStatistic", b =>
@@ -533,7 +533,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductStatistics");
+                    b.ToTable("ProductStatistics", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Services", b =>
@@ -558,7 +558,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Services");
+                    b.ToTable("Services", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Settings", b =>
@@ -657,7 +657,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.User", b =>
@@ -681,7 +681,7 @@ namespace Alwalid.Cms.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Alwalid.Cms.Api.Entities.Branch", b =>

@@ -9,6 +9,9 @@ using Alwalid.Cms.Api.Middleware;
 using ProductAPI.VSA.Features.Gemini.Endpoints;
 using System;
 using Alwalid.Cms.Api.Entities;
+using Alwalid.Cms.Api.Common.Exception;
+using Alwalid.Cms.Api.Features.Category.Dtos;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddOData(opt =>
 {
     opt.Select().Filter().OrderBy();
-}).AddNewtonsoftJson(x=>x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+}).AddNewtonsoftJson(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
 
 // Register the GemeinSettings to ease IOtions design pattern
@@ -37,6 +40,22 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Register ProblemDetails service
+
+builder.Services.AddProblemDetails(options =>
+{
+    options.CustomizeProblemDetails = ctx =>
+    {
+        ctx.ProblemDetails.Extensions["traceId"] = ctx.HttpContext.TraceIdentifier;
+        ctx.ProblemDetails.Extensions["timestamp"] = DateTime.UtcNow;
+        ctx.ProblemDetails.Instance = $"{ctx.HttpContext.Request.Method} {ctx.HttpContext.Request.Path}";
+    };
+});
+
+// Register the golbal exception handler into app container
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+
 // Add Memory Cache
 builder.Services.AddMemoryCache();
 
@@ -47,6 +66,9 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+
+builder.Services.AddValidatorsFromAssemblyContaining<CategoryRequestDtoValidator>(); 
 // Add Application Services
 builder.Services.AddApplication();
 
@@ -54,7 +76,7 @@ builder.Services.AddApplication();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddReverseProxy()
-	.LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
+    .LoadFromConfig(builder.Configuration.GetSection("ReverseProxy"));
 
 var app = builder.Build();
 
@@ -85,6 +107,10 @@ app.UseHttpsRedirection();
 app.UseMiddleware<RateLimitingMiddleware>();
 
 app.UseCors("ProductionPolicy");
+
+// Add status code pages
+app.UseStatusCodePages();
+app.UseExceptionHandler();
 
 app.UseStaticFiles(new StaticFileOptions
 {
