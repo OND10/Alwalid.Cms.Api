@@ -157,6 +157,42 @@ dotnet test tests/ChatApp.IntegrationTests
 dotnet test --collect:"XPlat Code Coverage"
 ```
 
+### 7. Test Google OAuth Authentication
+
+The API uses Google OAuth for authentication. Here are multiple ways to get a Google token:
+
+#### Option 1: Use the Test Frontend (Easiest)
+1. Open `test-frontend.html` in your browser
+2. Sign in with Google
+3. Copy the access token
+4. Test the API directly from the page
+
+#### Option 2: Use Test Scripts
+```bash
+# For Linux/Mac users
+./test-api.sh
+
+# For Windows users (PowerShell)
+./test-api.ps1
+```
+
+#### Option 3: Google OAuth Playground
+1. Go to [Google OAuth Playground](https://developers.google.com/oauthplayground/)
+2. Use the provided Client ID: `212127799857-ltspi8qut4fu0g94sj3t2kpdps831kgh.apps.googleusercontent.com`
+3. Select userinfo scopes and get access token
+
+#### Option 4: Manual cURL
+```bash
+# Replace YOUR_ACCESS_TOKEN with token from above methods
+curl -X POST "https://localhost:7206/api/auth/google" \
+     -H "Content-Type: application/json" \
+     -H "Accept: application/json" \
+     -d '{"googleToken": "YOUR_ACCESS_TOKEN"}' \
+     -k
+```
+
+📖 **For detailed instructions, see `google-oauth-guide.md`**
+
 ## 📖 API Documentation
 
 ### Authentication Endpoints
