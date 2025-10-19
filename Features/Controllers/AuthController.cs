@@ -23,7 +23,7 @@ namespace Alwalid.Cms.Api.Features.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto registerDto)
         {
-            var user = new ApplicationUser { UserName = registerDto.Username, Email = registerDto.Email };
+            var user = new ApplicationUser { UserName = registerDto.Email, Email = registerDto.Email };
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
             if (!result.Succeeded) return BadRequest(result.Errors);
