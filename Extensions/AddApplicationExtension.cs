@@ -113,6 +113,7 @@ using Alwalid.Cms.Api.Features.Category.Events;
 using Alwalid.Cms.Api.Features.Category.Handlers;
 using FluentValidation;
 using System;
+using Alwalid.Cms.Api.Features.Conversation.Services;
 
 namespace Alwalid.Cms.Api.Extensions
 {
@@ -249,8 +250,10 @@ namespace Alwalid.Cms.Api.Extensions
             //Validators
             services.AddScoped<IValidator<CategoryRequestDto>, CategoryRequestDtoValidator>();
 
-         
 
+
+            services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IConversationService, ConversationService>();
 
             //Registering External Services
             services.AddTransient<IEmailSender, EmailSender>();

@@ -15,11 +15,11 @@ namespace Alwalid.Cms.Api.Extensions
 		public static void ConfigureRequestPipeline(this WebApplication app, IWebHostEnvironment env)
 		{
 			// Configure the HTTP request pipeline.
-			if (env.IsDevelopment())
-			{
-				app.UseSwagger();
-				app.UseSwaggerUI();
-			}
+			//if (env.IsDevelopment())
+			//{
+			app.UseSwagger();
+			app.UseSwaggerUI();
+			//}
 
 			// Middleware order is important
 			app.UseHttpsRedirection();

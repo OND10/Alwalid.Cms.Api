@@ -2,10 +2,11 @@
 using Alwalid.Cms.Api.Entities;
 using Alwalid.Cms.Api.Shared;
 using Alwalid.Cms.Api.Events;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Alwalid.Cms.Api.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly IEventPublisher _publisher;
 
@@ -31,12 +32,23 @@ namespace Alwalid.Cms.Api.Data
         public DbSet<Partners> Partners { get; set; }
         public DbSet<Entities.Services> Services { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<ApplicationUser>()
+           .HasMany(u => u.Conversations)
+           .WithOne(c => c.ApplicationUser)
+           .HasForeignKey(c => c.ApplicationUserId);
+
+            modelBuilder.Entity<Conversation>()
+                .HasMany(c => c.Messages)
+                .WithOne(m => m.Conversation)
+                .HasForeignKey(m => m.ConversationId);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
 

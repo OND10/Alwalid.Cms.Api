@@ -5,6 +5,7 @@ using Alwalid.Cms.Api.Settings;
 using System.Text.Json;
 using System.Text;
 using Alwalid.Cms.Api.Features.Gemini.Dtos;
+using Alwalid.Cms.Api.Entities;
 
 namespace Alwalid.Cms.Api.Features.Gemini.Commands.GenerateContent
 {
@@ -22,25 +23,29 @@ namespace Alwalid.Cms.Api.Features.Gemini.Commands.GenerateContent
 
         public async Task<Result<string>> Handle(GenerateContentCommand command, CancellationToken cancellationToken)
         {
-            var requestPayload = BuildRequest(command.Prompt);
+            var requestPayload = BuildRequest(command.history);
             var response = await SendRequestAsync(requestPayload);
             var content = await ExtractResponseContentAsync(response);
             var result = ExtractTextFromResponse(content);
             return await Result<string>.SuccessAsync(result, "Get the Ai result", true);
         }
 
-        private static GeminiRequestDto BuildRequest(string prompt) => new()
+        private static object BuildRequest(IEnumerable<Entities.Message> history)
         {
-            contents = new List<Content>
-        {
-            new Content
+            var requestBody = new
             {
-                parts = new List<Part> { new Part { text = prompt } }
-            }
-        }
-        };
+                contents = history.Select(m => new
+                {
+                    role = m.Role,
+                    parts = new[] { new { text = m.Content } }
+                })
+            };
 
-        private async Task<HttpResponseMessage> SendRequestAsync(GeminiRequestDto request)
+            return requestBody;
+        
+        }
+
+        private async Task<HttpResponseMessage> SendRequestAsync(object request)
         {
             var json = JsonSerializer.Serialize(request);
             using var content = new StringContent(json, Encoding.UTF8, "application/json");
