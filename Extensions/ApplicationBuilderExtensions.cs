@@ -3,6 +3,7 @@ using Alwalid.Cms.Api.Entities;
 using Alwalid.Cms.Api.Features.Order.Dtos;
 using Alwalid.Cms.Api.Features.Order.Payments;
 using Alwalid.Cms.Api.Features.Order.Repositories;
+using Alwalid.Cms.Api.Hubs;
 using Alwalid.Cms.Api.Middleware;
 using Alwalid.Cms.Api.StateMachine;
 using Microsoft.AspNetCore.Mvc;
@@ -33,11 +34,14 @@ namespace Alwalid.Cms.Api.Extensions
 				RequestPath = "/Images"
 			});
 
-			app.UseAuthorization();
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
 			// Map endpoints
 			app.MapControllers();
-			app.MapReverseProxy();
+            app.MapHub<ChatHub>("/chathub");
+            app.MapReverseProxy();
 
 			app.MapApplicationEndpoints();
 

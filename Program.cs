@@ -19,10 +19,4 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 app.ConfigureRequestPipeline(app.Environment);
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.MapHub<ChatHub>("/chathub");
 app.Run();

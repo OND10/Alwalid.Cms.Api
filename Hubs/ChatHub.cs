@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace Alwalid.Cms.Api.Hubs
 {
-    [Authorize] // Secure the hub so only authenticated users can connect.
+    //[Authorize] // Secure the hub so only authenticated users can connect.
     public class ChatHub : Hub
     {
         // This method will be called by the client to join a specific conversation's "group".
