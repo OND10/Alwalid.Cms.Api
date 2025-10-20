@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manus AI Chat</title>
+    <style>
+        :root {
+            --body-bg: #f5f7fa;
+            --chat-bg: #ffffff;
+            --user-msg-bg: #007bff;
+            --model-msg-bg: #e9ecef;
+            --user-msg-color: #ffffff;
+            --model-msg-color: #333;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --border-radius: 18px;
+            --input-bg: #f1f1f1;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--body-bg);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .chat-container {
+            width: 100%;
+            max-width: 700px;
+            height: 90vh;
+            background-color: var(--chat-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 16px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .chat-header .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #ccc; /* Disconnected */
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-header .status-dot.connected {
+            background-color: #28a745; /* Green for connected */
+        }
+        
+        .chat-header .status-dot.error {
+            background-color: #dc3545; /* Red for error */
+        }
+
+        .messages-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            display: flex;
+            margin-bottom: 15px;
+            max-width: 75%;
+        }
+
+        .message .content {
+            padding: 12px 18px;
+            border-radius: var(--border-radius);
+            line-height: 1.5;
+            white-space: pre-wrap; /* Preserve whitespace and newlines */
+        }
+
+        .message.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .message.user .content {
+            background-color: var(--user-msg-bg);
+            color: var(--user-msg-color);
+            border-bottom-right-radius: 4px;
+        }
+
+        .message.model {
+            align-self: flex-start;
+        }
+
+        .message.model .content {
+            background-color: var(--model-msg-bg);
+            color: var(--model-msg-color);
+            border-bottom-left-radius: 4px;
+        }
+        
+        .message.typing-indicator {
+            align-self: flex-start;
+            font-style: italic;
+            color: #888;
+        }
+
+        .message.typing-indicator .content {
+            background-color: var(--model-msg-bg);
+            display: flex;
+            align-items: center;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            margin: 0 2px;
+            background-color: #aaa;
+            border-radius: 50%;
+            animation: typing-blink 1.4s infinite both;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing-blink {
+            0% { opacity: 0.2; }
+            20% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+
+        .input-area {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+        }
+
+        .input-form {
+            display: flex;
+            gap: 10px;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            transition: border-color 0.2s;
+        }
+
+        #message-input:focus {
+            outline: none;
+            border-color: var(--user-msg-bg);
+        }
+
+        #send-button {
+            padding: 12px 25px;
+            border: none;
+            background-color: var(--user-msg-bg);
+            color: white;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #send-button:hover {
+            background-color: #0056b3;
+        }
+        
+        #send-button:disabled {
+            background-color: #a0c7ff;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <div id="status-dot" class="status-dot"></div>
+            Ai Chat
+        </div>
+        <div class="messages-area" id="messages-area">
+            <!-- Messages will be dynamically inserted here -->
+        </div>
+        <div class="input-area">
+            <form class="input-form" id="input-form">
+                <input type="text" id="message-input" placeholder="Type your message..." autocomplete="off">
+                <button type="submit" id="send-button">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Import the SignalR client library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+
+    <script>
+        // --- CONFIGURATION ---
+        const API_BASE_URL = "https://localhost:7206";
+        const JWT_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwNDg1ZjVhOC01YjdmLTRiY2MtOGZjNS0zNTgyYjI1MDJjYTUiLCJlbWFpbCI6Im9zYW1hQGV4YW1wbGUuY29tIiwibmFtZSI6Im9zYW1hQGV4YW1wbGUuY29tIiwibmJmIjoxNzYwOTM4MDQyLCJleHAiOjE3NjE1NDI4NDIsImlhdCI6MTc2MDkzODA0MiwiaXNzIjoiand0LWVucmljaGVkIiwiYXVkIjoiand0LWVucmljaGVkX29uZCJ9.-6O6dti9ZFqXWvZB9m7sTvIX2HpNcuwB5UJOLSa0FUA";
+        const CONVERSATION_ID = "e3926940-0dfd-4002-67f0-08de0fa05c08";
+
+        // --- UI ELEMENTS ---
+        const messagesArea = document.getElementById('messages-area' );
+        const inputForm = document.getElementById('input-form');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+        const statusDot = document.getElementById('status-dot');
+
+        // --- HELPER FUNCTIONS ---
+        function addMessageToUI(role, content) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', role); // 'user' or 'model'
+            
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('content');
+            contentDiv.textContent = content;
+            
+            messageDiv.appendChild(contentDiv);
+            messagesArea.appendChild(messageDiv);
+            
+            // Scroll to the bottom
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+        
+        function showTypingIndicator() {
+            // Prevent adding multiple indicators
+            if (document.getElementById('typing-indicator')) return;
+            
+            const indicatorDiv = document.createElement('div');
+            indicatorDiv.id = 'typing-indicator';
+            indicatorDiv.classList.add('message', 'typing-indicator');
+            indicatorDiv.innerHTML = `
+                <div class="content">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            `;
+            messagesArea.appendChild(indicatorDiv);
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+        }
+
+        // --- API & SIGNALR LOGIC ---
+        
+        // 1. Establish the SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl(`${API_BASE_URL}/chathub`, {
+                accessTokenFactory: () => JWT_TOKEN
+            })
+            .withAutomaticReconnect()
+            .build();
+
+        // 2. Define what happens when a message is received from the server
+        connection.on("ReceiveMessage", (receivedConversationId, message) => {
+            console.log(`New message for conversation ${receivedConversationId}:`, message);
+            
+            // Ensure the message is for the current conversation
+            if (receivedConversationId.toLowerCase() === CONVERSATION_ID.toLowerCase()) {
+                removeTypingIndicator(); // AI has responded, so remove indicator
+                addMessageToUI(message.role, message.content);
+            }
+        });
+
+        // 3. Start the connection and handle UI updates
+        async function startSignalR() {
+            try {
+                await connection.start();
+                console.log("SignalR Connected.");
+                statusDot.classList.add('connected');
+
+                // Tell the server we are interested in messages for this conversation
+                await connection.invoke("JoinConversationGroup", CONVERSATION_ID);
+                console.log(`Joined conversation group: ${CONVERSATION_ID}`);
+                
+            } catch (err) {
+                console.error("SignalR Connection Error: ", err);
+                statusDot.classList.add('error');
+                setTimeout(startSignalR, 5000); // Retry connection after 5 seconds
+            }
+        }
+
+        // Handle connection status for UI
+        connection.onreconnecting(error => {
+            console.warn(`SignalR connection lost. Attempting to reconnect...`);
+            statusDot.classList.remove('connected', 'error');
+        });
+
+        connection.onreconnected(connectionId => {
+            console.log(`SignalR reconnected with ID: ${connectionId}`);
+            statusDot.classList.add('connected');
+        });
+
+        connection.onclose(error => {
+            console.error(`SignalR connection closed.`, error);
+            statusDot.classList.add('error');
+        });
+
+        // 4. Function to send a message via HTTP POST
+        async function sendMessage(conversationId, text) {
+            // Disable form while sending
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+
+            showTypingIndicator(); // Show indicator immediately for better UX
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/chat/message`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${JWT_TOKEN}`
+                    },
+                    body: JSON.stringify({
+                        conversationId: conversationId,
+                        message: text
+                    })
+                });
+
+                if (!response.ok && response.status !== 202) { // 202 Accepted is a success case
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+                
+                // The response will come via SignalR, so we don't need to do anything here.
+                
+            } catch (error) {
+                console.error("Failed to send message:", error);
+                removeTypingIndicator();
+                addMessageToUI('model', 'Sorry, I was unable to send your message. Please try again.');
+            } finally {
+                // Re-enable form
+                sendButton.disabled = false;
+                messageInput.disabled = false;
+                messageInput.focus();
+            }
+        }
+
+        // 5. Function to fetch and display initial chat history
+        async function loadInitialHistory() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/chat/${CONVERSATION_ID}`, {
+                    headers: {
+                        "Authorization": `Bearer ${JWT_TOKEN}`
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch history: ${response.statusText}`);
+                }
+                const conversation = await response.json();
+                messagesArea.innerHTML = ''; // Clear any existing messages
+                conversation.messages.forEach(msg => {
+                    addMessageToUI(msg.role, msg.content);
+                });
+            } catch (error) {
+                console.error(error);
+                addMessageToUI('model', 'Could not load conversation history.');
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Attach event listener to the form
+            inputForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const messageText = messageInput.value.trim();
+                if (messageText) {
+                    // Add user's message to UI immediately for responsiveness
+                    addMessageToUI('user', messageText);
+                    sendMessage(CONVERSATION_ID, messageText);
+                    messageInput.value = '';
+                }
+            });
+
+            // Load history and then start SignalR
+            loadInitialHistory().then(() => {
+                startSignalR();
+            });
+        });
+    </script>
+</body>
+</html>
