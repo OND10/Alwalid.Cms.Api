@@ -1,0 +1,31 @@
+In angular. Build for me a full stack web application that integrate api backend. This backend about a project to make products. User can login, register, reset password,
+and so on. Once user logged in successfully the response of login returns access_token (jwt) also a http only cookie set for refresh_token. In angular I want to implement :
+
+
+Core scope :
+
+1) Provide a generic api endpoint service that implement generic http methods. Get, Post, Put, Patch and delete. It may seem(like repository pattern)
+2) Provide a generic response handler to catch each api endpoint into catch block. This handler should take English message localize it into Arabic and returning message 
+   in a global toast with status of http so on.
+3) Endpoints for backend. After setting base url into environment it must be call into constant endpoints class that contains all api backend endpoints for example.
+     const products = basUrl + "api/v1/products"
+4) Try to implement global toast and encapsulate it with whole application.
+Authentication scope :
+1) Provide login, register components.
+2) Auth service to handle api integration with injection Api endpoint service to use http methods to each auth service method.
+3) Try not to store tokens in local storage. Try to make a global state for access token wherever refresh token must be in browser cookie stored.
+4) Functionality of access token expiration and hitting endpoint auth/refresh to hit endpoint and getting a new access token.
+5) Interceptor, guard to implement auth middleware in which it controls the token. The redirection of user if tries to access a page by changing the url manually and redirects 
+   into login page.
+6) Logout functionality with removing global state of token and other states and cookies.
+7) Types of auth for example user type, user response, loginmodel, registermodel
+
+Features scope :
+ 
+1) Api types for each feature for example product types.
+2) Api service for each feature.
+3) Ui components for each feature.
+
+
+
+
